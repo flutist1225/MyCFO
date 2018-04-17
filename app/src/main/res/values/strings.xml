@@ -1,0 +1,53 @@
+<resources>
+    <string name="app_name">MyCFO</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <string name="column_category">类别*：</string>
+    <string name="column_event">事件*：</string>
+    <string name="column_price">金额*：</string>
+    <string name="column_time">时间 ：</string>
+    <string name="column_location">地点 ：</string>
+    <string name="column_person">为谁 ：</string>
+    <string name="column_payType">付款方式 ：</string>
+
+    <string name="category_name_cloth">衣</string>
+    <string name="category_name_eat">食</string>
+    <string name="category_name_house">住</string>
+    <string name="category_name_run">行</string>
+    <string name="category_name_happy">乐</string>
+    <string name="category_name_life">命</string>
+    <string name="category_name_education">教育</string>
+    <string name="category_name_communication">通讯</string>
+    <string name="category_name_invest">投资</string>
+    <string name="category_name_debt">还债</string>
+
+    <string name="hint_event">请输入费用目的</string>
+    <string name="hint_price">请输入费用金额</string>
+    <string name="hint_position">发生地点</string>
+    <string name="hint_who">费用是花在谁身上</string>
+    <string name="hint_myself">我</string>
+    <string name="hint_time">费用产生时间</string>
+
+    <string name="payType_cash">现金</string>
+    <string name="payType_weixin">微信</string>
+    <string name="payType_zhifubao">支付宝</string>
+    <string name="payType_card">借记卡</string>
+    <string name="payType_creditCard">信用卡</string>
+
+    <string name="button_add">添加</string>
+    <string name="button_again">再一发</string>
+    <string name="button_ok">OK</string>
+
+    <string name="button_query_days">范围：</string>
+    <string name="button_query_week">一周</string>
+    <string name="button_query_months">一月</string>
+    <string name="button_query_3months">三月</string>
+    <string name="button_query_6months">六月</string>
+    <string name="button_query_year">一年</string>
+    <string name="button_query_do">查询</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
