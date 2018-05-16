@@ -40,7 +40,7 @@ public class MyListRecordRecyclerViewAdapter extends RecyclerView.Adapter<MyList
         Date nowDate = new Date(mValues.get(position).getAsLong(CMyDBHelper.FIELD_TIME));
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd");
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
         holder.mTimeView.setText(timeFormat.format(nowDate));
         holder.mDateView.setText(dateFormat.format(nowDate));
@@ -86,4 +86,6 @@ public class MyListRecordRecyclerViewAdapter extends RecyclerView.Adapter<MyList
             return super.toString() + " '" + mContentView.getText() + "'";
         }
     }
+
+
 }
