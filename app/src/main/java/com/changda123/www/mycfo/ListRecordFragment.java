@@ -7,18 +7,11 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.changda123.www.mycfo.dummy.DummyContent;
-import com.changda123.www.mycfo.dummy.DummyContent.DummyItem;
 
 import java.util.List;
 
@@ -66,9 +59,6 @@ public class ListRecordFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
-
-
-
     }
 
     @Override
@@ -79,20 +69,14 @@ public class ListRecordFragment extends Fragment {
         // Set the adapter
 
         Context context = view.getContext();
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.list);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewId);
         if (mColumnCount <= 1) {
             mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         } else {
             mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
-        /*
-        List<ContentValues> recordList = ((TabMenuActivity)getActivity()).queryRecord(10);
-        if(null != recordList) {
-            recyclerView.setAdapter(new MyListRecordRecyclerViewAdapter(recordList, mListener));
-        }
-        */
-        initView(view);
 
+        initView(view);
 
         return view;
     }
@@ -162,7 +146,7 @@ public class ListRecordFragment extends Fragment {
                         break;
                 }
                 MyLog.d(TAG, "initView  days:" + days );
-                List<ContentValues> listData =  ((TabMenuActivity)getActivity()).queryRecord(days);
+                List<ContentValues> listData =  ((MainActivity)getActivity()).queryRecord(days);
                 setRecyclerViewAdpter(listData);
             }
         });

@@ -194,7 +194,7 @@ public class MyCFOService extends Service implements OnResult{
                         String selection = CMyDBHelper.FIELD_TIME + ">" + timeRange;
                         MyLog.d(TAG, "MyCFO WorkThread selection:"+selection);
 
-                        String[] columns = {CMyDBHelper.FIELD_CATEGORY, CMyDBHelper.FIELD_ID, CMyDBHelper.FIELD_DISPLAY_TIME,CMyDBHelper.FIELD_EVENT, CMyDBHelper.FIELD_PRICE};
+                        String[] columns = {CMyDBHelper.FIELD_CATEGORY, CMyDBHelper.FIELD_ID, CMyDBHelper.FIELD_TIME,CMyDBHelper.FIELD_EVENT, CMyDBHelper.FIELD_PRICE};
                         /*
                         StringBuffer whereBuffer = new StringBuffer();
                         whereBuffer.append(CMyDBHelper.FIELD_NAME).append(" = ").append("'").append(name).append("'");

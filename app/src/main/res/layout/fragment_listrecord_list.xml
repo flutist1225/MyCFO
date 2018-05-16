@@ -66,15 +66,13 @@
         android:text="@string/button_query_do" />
 
     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list"
-    android:name="com.changda123.www.mycfo.ListRecordFragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layoutManager="LinearLayoutManager"
-    tools:context=".ListRecordFragment"
-    tools:listitem="@layout/fragment_listrecord" >
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/recyclerViewId"
+        android:name="com.changda123.www.mycfo.ListRecordFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ListRecordFragment"
+        tools:listitem="@layout/fragment_listrecord">
 
     </android.support.v7.widget.RecyclerView>
 

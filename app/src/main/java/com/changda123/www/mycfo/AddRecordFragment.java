@@ -37,7 +37,7 @@ public class AddRecordFragment extends Fragment {
     View mView;
 
 
-    private RadioGroup mRadioGroupCaletory;
+    private RadioGroupEx mRadioGroupCaletory;
     private RadioButton mRadioButtonCalegory;
     private RadioGroup mRadioGroupPayType;
     private RadioButton mRadioButtonPayType;
@@ -48,6 +48,8 @@ public class AddRecordFragment extends Fragment {
     private TextView mTextWho;
     private TextView mPayType;
     private Button mButtonAdd;
+
+    private String mQuickKeyString;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -136,7 +138,7 @@ public class AddRecordFragment extends Fragment {
 
     private void initView(final View view){
 
-        mRadioGroupCaletory = (RadioGroup) view.findViewById(R.id.idRadioGroupCalegory);
+        mRadioGroupCaletory = (RadioGroupEx) view.findViewById(R.id.idRadioGroupCalegory);
 
         mTextEvent = (TextView) view.findViewById(R.id.idEditTextEvent);
         mTextPrice = (TextView) view.findViewById(R.id.idEditTextPrice);
@@ -145,7 +147,42 @@ public class AddRecordFragment extends Fragment {
         mTextWho   = (TextView) view.findViewById(R.id.idEditTextWho);
         mRadioGroupPayType = (RadioGroup) view.findViewById(R.id.idRadioGroupPayType);
 
-        mButtonAdd = (Button)view.findViewById(R.id.idButtonAdd);
+        Button quickKeyButtonStopCar      = (Button) view.findViewById(R.id.idButtonStopCar);
+        Button quickKeyButtonBuyVegetable = (Button) view.findViewById(R.id.idButtonBuyVegetable);
+        Button quickKeyButtonEatSomething = (Button) view.findViewById(R.id.idButtonEatSomething);
+        Button quickKeyButtonRestuarant   = (Button) view.findViewById(R.id.idButtonRestaurant);
+
+        quickKeyButtonStopCar.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 mTextEvent.setText(R.string.quickKey_stop_car);
+                 mRadioGroupCaletory.check(R.id.radioButtonRun);
+                 mTextPrice.setText(R.string.const_string_10);
+             }
+         });
+        quickKeyButtonBuyVegetable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTextEvent.setText(R.string.quickKey_buy_vegetable);
+                mRadioGroupCaletory.check(R.id.radioButtonEat);
+            }
+        });
+        quickKeyButtonEatSomething.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTextEvent.setText(R.string.quickKey_eat_something);
+                mRadioGroupCaletory.check(R.id.radioButtonEat);
+            }
+        });
+        quickKeyButtonRestuarant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTextEvent.setText(R.string.quickKey_restaurant);
+                mRadioGroupCaletory.check(R.id.radioButtonEat);
+            }
+        });
+
+        mButtonAdd = (Button) view.findViewById(R.id.idButtonAdd);
         mButtonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -172,7 +209,7 @@ public class AddRecordFragment extends Fragment {
                 }
 
                 // Add new record
-                ((TabMenuActivity)getActivity()).addNewRecord(
+                ((MainActivity)getActivity()).addNewRecord(
                         mRadioButtonCalegory.getText().toString(),
                         mTextEvent.getText().toString(),
                         mTextPrice.getText().toString(),

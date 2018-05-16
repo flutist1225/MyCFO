@@ -8,15 +8,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.changda123.www.mycfo.ListRecordFragment.OnListFragmentInteractionListener;
-import com.changda123.www.mycfo.dummy.DummyContent.DummyItem;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class MyListRecordRecyclerViewAdapter extends RecyclerView.Adapter<MyListRecordRecyclerViewAdapter.ViewHolder> {
 
     private final List<ContentValues> mValues;
@@ -40,8 +36,14 @@ public class MyListRecordRecyclerViewAdapter extends RecyclerView.Adapter<MyList
         holder.mIdView.setText(mValues.get(position).getAsString(CMyDBHelper.FIELD_ID));
         holder.mContentView.setText(mValues.get(position).getAsString(CMyDBHelper.FIELD_EVENT));
         holder.mPriceView.setText(mValues.get(position).getAsString(CMyDBHelper.FIELD_PRICE));
-        holder.mTimeView.setText(mValues.get(position).getAsString(CMyDBHelper.FIELD_DISPLAY_TIME));
 
+        Date nowDate = new Date(mValues.get(position).getAsLong(CMyDBHelper.FIELD_TIME));
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+
+        holder.mTimeView.setText(timeFormat.format(nowDate));
+        holder.mDateView.setText(dateFormat.format(nowDate));
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,6 +65,7 @@ public class MyListRecordRecyclerViewAdapter extends RecyclerView.Adapter<MyList
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
+        public final TextView mDateView;
         public final TextView mTimeView;
         public final TextView mPriceView;
 
@@ -75,6 +78,7 @@ public class MyListRecordRecyclerViewAdapter extends RecyclerView.Adapter<MyList
             mContentView = (TextView) view.findViewById(R.id.event);
             mTimeView = (TextView) view.findViewById(R.id.time);
             mPriceView = (TextView) view.findViewById(R.id.price);
+            mDateView  = (TextView) view.findViewById(R.id.date);
         }
 
         @Override

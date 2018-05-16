@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">MyCFO</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_account">记账</string>
+    <string name="title_note">记事</string>
+    <string name="title_notifications">提醒</string>
 
+    <string name="column_quick_key_text">快键：</string>
     <string name="column_category">类别*：</string>
     <string name="column_event">事件*：</string>
     <string name="column_price">金额*：</string>
@@ -47,6 +48,15 @@
     <string name="button_query_6months">六月</string>
     <string name="button_query_year">一年</string>
     <string name="button_query_do">查询</string>
+
+
+    <string name="quickKey_stop_car">停车费</string>
+    <string name="quickKey_buy_vegetable">买菜</string>
+    <string name="quickKey_eat_something">零食</string>
+    <string name="quickKey_restaurant">聚餐</string>
+
+    <string name="const_string_10">10</string>
+    <string name="const_string_me">我</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
