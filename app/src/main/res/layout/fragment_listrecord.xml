@@ -8,8 +8,8 @@
         android:id="@+id/item_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="2dp"
-        android:layout_marginStart="2dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginStart="4dp"
         android:layout_gravity="center_vertical"
         android:textAppearance="?android:attr/textAppearanceListItem" />
 
@@ -17,7 +17,8 @@
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="2dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="8dp"
         android:layout_gravity="center_vertical"
         android:textAppearance="?android:attr/textAppearanceListItem" />
 
@@ -31,9 +32,10 @@
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="1dp"
             android:textSize="12sp"
-            android:textColor="@android:color/holo_blue_light"
+            android:textColor="@color/colorPrimaryDark"
             android:background="@drawable/round_corners_rectangle"
             android:textAppearance="?android:attr/textAppearanceListItem" />
 
@@ -41,7 +43,8 @@
             android:id="@+id/event"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="4dp"
             android:singleLine="true"
             android:ellipsize="end"
             android:textAppearance="?android:attr/textAppearanceListItem" />

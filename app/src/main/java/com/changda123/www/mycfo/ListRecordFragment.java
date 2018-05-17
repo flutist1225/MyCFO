@@ -147,7 +147,7 @@ public class ListRecordFragment extends Fragment {
                         break;
                 }
                 MyLog.d(TAG, "initView  days:" + days );
-                List<ContentValues> listData =  ((MainActivity)getActivity()).queryRecord(days);
+                List<ContentValues> listData =  ((MainActivity)getActivity()).queryRecordList(days);
                 setRecyclerViewAdpter(listData);
             }
         });

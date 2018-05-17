@@ -194,7 +194,8 @@ public class MyCFOService extends Service implements OnResult{
                         String selection = CMyDBHelper.FIELD_TIME + ">" + timeRange;
                         MyLog.d(TAG, "MyCFO WorkThread selection:"+selection);
 
-                        String[] columns = {CMyDBHelper.FIELD_CATEGORY, CMyDBHelper.FIELD_ID, CMyDBHelper.FIELD_TIME,CMyDBHelper.FIELD_EVENT, CMyDBHelper.FIELD_PRICE};
+                        String[] columns = {CMyDBHelper.FIELD_CATEGORY, CMyDBHelper.FIELD_ID, CMyDBHelper.FIELD_TIME,CMyDBHelper.FIELD_EVENT, CMyDBHelper.FIELD_PRICE, CMyDBHelper.FIELD_YEAR, CMyDBHelper.FIELD_MONTH, CMyDBHelper.FIELD_WEEK};
+                        //String[] columns = {CMyDBHelper.FIELD_CATEGORY, CMyDBHelper.FIELD_ID, CMyDBHelper.FIELD_TIME,CMyDBHelper.FIELD_EVENT, CMyDBHelper.FIELD_PRICE};
                         /*
                         StringBuffer whereBuffer = new StringBuffer();
                         whereBuffer.append(CMyDBHelper.FIELD_NAME).append(" = ").append("'").append(name).append("'");
@@ -206,7 +207,11 @@ public class MyCFOService extends Service implements OnResult{
                             for(int i=0; i<arrayContentList.size(); i++) {
                                 MyLog.d(TAG, "MyCFO WorkThread DB query, category: " + arrayContentList.get(i).getAsString(CMyDBHelper.FIELD_CATEGORY) +
                                         " id: " + arrayContentList.get(i).getAsString(CMyDBHelper.FIELD_ID) +
-                                        " event: " + arrayContentList.get(i).getAsString(CMyDBHelper.FIELD_EVENT));
+                                        " event: " + arrayContentList.get(i).getAsString(CMyDBHelper.FIELD_EVENT)+
+
+                                        " year: " + arrayContentList.get(i).getAsInteger(CMyDBHelper.FIELD_YEAR) +
+                                        " mon: " + arrayContentList.get(i).getAsInteger(CMyDBHelper.FIELD_MONTH) +
+                                        " week: " + arrayContentList.get(i).getAsInteger(CMyDBHelper.FIELD_WEEK));
 
                             }
 

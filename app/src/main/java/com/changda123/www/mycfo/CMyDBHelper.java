@@ -1,16 +1,20 @@
 package com.changda123.www.mycfo;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
 
 public class CMyDBHelper extends SQLiteOpenHelper{
     private static final String TAG = "MyCFO_CMyDBHelper";
     //数据库的版本号
-    private static final int DATABASE_VERSION = 1000;
+    private static final int DATABASE_VERSION = 1001;
 
     //数据库名称
     private static final String DATABASE_NAME = "MyCFO.db";
@@ -25,6 +29,10 @@ public class CMyDBHelper extends SQLiteOpenHelper{
     public static final String FIELD_DISPLAY_TIME ="display_time";
     public static final String FIELD_WHO = "who";
     public static final String FIELD_PAY_TYPE = "pay_type";
+    public static final String FIELD_YEAR  = "year";
+    public static final String FIELD_MONTH = "month";
+    public static final String FIELD_WEEK  = "week";
+
 
     public static final String TABLE_NAME_CATEGORY = "category";// category表
     public static final String FIELD_NAME = "category";
@@ -59,22 +67,51 @@ public class CMyDBHelper extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // 使用for实现跨版本升级数据库
+        MyLog.d(TAG, "do onUpgrade oldVersion:"+oldVersion + " newVersion:"+newVersion);
         for (int i = oldVersion; i < newVersion; i++) {
             switch (i) {
-                /*
                 case 1000:
-                    String sql1 = "ALTER TABLE "+SQL.T_FAVORITE+" ADD COLUMN deleted VARCHAR";
-                    db.execSQL(sql1);
+                    MyLog.d(TAG, "do onUpgrade to ver 1001....");
+                    db.beginTransaction();
+                    try {
+
+                        String sqlAddYear = "ALTER TABLE " + TABLE_NAME_RECORD + " ADD COLUMN year int";
+                        String sqlAddMonth = "ALTER TABLE " + TABLE_NAME_RECORD + " ADD COLUMN month int";
+                        String sqlAddWeek = "ALTER TABLE " + TABLE_NAME_RECORD + " ADD COLUMN week int";
+                        db.execSQL(sqlAddYear);
+                        db.execSQL(sqlAddMonth);
+                        db.execSQL(sqlAddWeek);
+
+                        Cursor cursor = db.query(TABLE_NAME_RECORD, new String[]{FIELD_ID, FIELD_TIME}, null, null, null, null, null);
+                        while (cursor.moveToNext()) {
+
+                            int id = cursor.getInt(cursor.getColumnIndex(FIELD_ID));
+                            long time = cursor.getLong(cursor.getColumnIndex(FIELD_TIME));
+                            ContentValues values = new ContentValues();
+                            Date date = new Date(time);
+                            Calendar cal = Calendar.getInstance();
+                            cal.setTime(date);
+
+                            values.put(FIELD_YEAR, cal.get(Calendar.YEAR));
+                            values.put(FIELD_MONTH, cal.get(Calendar.MONTH) + 1);
+                            values.put(FIELD_WEEK, cal.get(Calendar.WEEK_OF_YEAR));
+
+                            db.update(TABLE_NAME_RECORD, values, FIELD_ID + "=?", new String[]{String.valueOf(id)});
+                        }
+                        db.setTransactionSuccessful();
+                        cursor.close();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }finally {
+                        db.endTransaction();
+                    }
+
                     break;
-                case 1001:
-                    String sql1 = "ALTER TABLE "+SQL.T_FAVORITE+" ADD COLUMN message VARCHAR";
-                    db.execSQL(sql1);
-                    break;
-                */
                 default:
                     break;
             }
         }
+
     }
     /**
      * 创建账目流水表

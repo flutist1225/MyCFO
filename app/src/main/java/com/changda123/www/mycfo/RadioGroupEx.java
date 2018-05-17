@@ -60,7 +60,6 @@ public class RadioGroupEx extends RadioGroup {
                 totalHeight += oldHeight;
                 //重置行高,当前这个View，属于下一行，因此当前最大行高为这个child的高度加上margin
                 maxLineHeight = child.getMeasuredHeight() + params.topMargin + params.bottomMargin;
-                Log.v(TAG, "maxHeight:" + totalHeight + "---" + "maxWidth:" + maxWidth);
 
             } else {
                 //不换行，累加宽度

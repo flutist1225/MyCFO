@@ -116,8 +116,8 @@ public class MainActivity extends AppCompatActivity implements
         mCFOServiceBinder.commitTransaction(strCategory, strEvent, strPrice, strLocation, lngTime,strWho, strPayType);
     }
 
-    public List<ContentValues> queryRecord(int days){
-        MyLog.d(TAG, "TabMenuActivity  queryRecord ok" );
+    public List<ContentValues> queryRecordList(int days){
+        MyLog.d(TAG, "TabMenuActivity  queryRecordList ok" );
         if(null != mCFOServiceBinder) {
             return mCFOServiceBinder.listRecords(days);
         }else{

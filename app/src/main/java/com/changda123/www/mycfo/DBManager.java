@@ -9,7 +9,10 @@ import android.database.sqlite.SQLiteDatabase;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+
+import static com.changda123.www.mycfo.CMyDBHelper.FIELD_WEEK;
 
 public class DBManager {
     private static final String TAG = "MyCFO_DBManager";
@@ -78,7 +81,13 @@ public class DBManager {
         values.put(CMyDBHelper.FIELD_DISPLAY_TIME, dateToString(new Date(lngTime)));
         values.put(CMyDBHelper.FIELD_WHO, strWho);
         values.put(CMyDBHelper.FIELD_PAY_TYPE, strPayType);
-        MyLog.d(TAG, "MyCFO newRecord time:"+lngTime);
+
+        Date date = new Date(lngTime);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        values.put(CMyDBHelper.FIELD_YEAR,  cal.get(Calendar.YEAR));
+        values.put(CMyDBHelper.FIELD_MONTH, cal.get(Calendar.MONTH) + 1);
+        values.put(CMyDBHelper.FIELD_WEEK,  cal.get(Calendar.WEEK_OF_YEAR));
 
         return values;
     }

@@ -7,7 +7,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+
+import com.github.mikephil.charting.charts.LineChart;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,7 +71,14 @@ public class StatisticalFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_statistical, container, false);
+        View view = inflater.inflate(R.layout.fragment_statistical, container, false);
+        LineChart chart = (LineChart) view.findViewById(R.id.chart);
+        TextView sumValue = (TextView) view.findViewById(R.id.statisticIdtext);
+
+        List<Map.Entry> entries = new ArrayList<>();
+
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
