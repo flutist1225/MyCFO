@@ -33,8 +33,8 @@ public class MyCFOService extends Service implements OnResult{
 
     private final byte[] mListRecordLock = new byte[0];
     private List<ContentValues> mRecordList;
-    DBManager   mMyDBManager;
-    SQLiteDatabase mDatabase;
+    DBManager      mMyDBManager;
+    SQLiteDatabase mDBHandler;
 
     @Override
     public void onCreate() {
@@ -44,7 +44,7 @@ public class MyCFOService extends Service implements OnResult{
         // 创建数据库和表
         //Todo 这里会因为数据库升级而导致开启APP卡顿吗？？，给APP一个状态提示最好
         mMyDBManager   = DBManager.getInstance(MyCFOService.this);
-        mDatabase      = mMyDBManager.getWriteDatabase();
+        mDBHandler      = mMyDBManager.getWriteDBHandler();
         // 启动工作线程
         initWorkThread();
 
@@ -62,8 +62,8 @@ public class MyCFOService extends Service implements OnResult{
     public void onDestroy() {
         MyLog.e(TAG, "################## MyCFO Service Destroy!##############");
         mWorkThread.quit();
-        if(mDatabase != null){
-            mDatabase.close();
+        if(mDBHandler != null){
+            mDBHandler.close();
         }
         super.onDestroy();
     }
@@ -99,7 +99,7 @@ public class MyCFOService extends Service implements OnResult{
                                      String strWho,
                                      String strPayType){
 
-            ContentValues values = mMyDBManager.newRecord(strCategory,strEvent,strPrice,strLocation,lngTime,strWho,strPayType);
+            ContentValues values = mMyDBManager.fillNewRecord(strCategory,strEvent,strPrice,strLocation,lngTime,strWho,strPayType);
 
             if(sendMsgToWorkThread(MSG_TYPE_ADD_TRANSACTION,values)){
                 return 0;
@@ -177,7 +177,7 @@ public class MyCFOService extends Service implements OnResult{
                         int id = (int)msg.obj;
                         StringBuffer whereBuffer = new StringBuffer();
                         whereBuffer.append(CMyDBHelper.FIELD_ID).append(" = ").append("'").append(id).append("'");
-                        retId  = mDatabase.delete(CMyDBHelper.TABLE_NAME_RECORD, whereBuffer.toString(), null);
+                        retId  = mDBHandler.delete(CMyDBHelper.TABLE_NAME_RECORD, whereBuffer.toString(), null);
                         if(retId > 0){
                             onSuccess(null);
                         }else{
@@ -200,7 +200,7 @@ public class MyCFOService extends Service implements OnResult{
                         StringBuffer whereBuffer = new StringBuffer();
                         whereBuffer.append(CMyDBHelper.FIELD_NAME).append(" = ").append("'").append(name).append("'");
                         */
-                        ArrayList<ContentValues> arrayContentList = mMyDBManager.queryRecordTable(columns,selection,null,null,null,null);
+                        ArrayList<ContentValues> arrayContentList = mMyDBManager.getRecordList(columns,selection,null,null,null,null);
                         if(DBManager.RETCODE_VALUE_OK == arrayContentList.get(0).getAsInteger(DBManager.RETCODE_KEY_RESULT)){
                             arrayContentList.remove(0);
                             // Debug 代码

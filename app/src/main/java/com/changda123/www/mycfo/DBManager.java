@@ -25,11 +25,11 @@ public class DBManager {
     private volatile static DBManager mInstance;
     // DatabaseHelper
     private CMyDBHelper mDbHelper;
-    private SQLiteDatabase mDbWriteConnection;
+    private SQLiteDatabase mDBWriteHandler;
 
     private DBManager(Context context) {
         mDbHelper = new CMyDBHelper(context);
-        mDbWriteConnection = mDbHelper.getWritableDatabase();
+        mDBWriteHandler = mDbHelper.getWritableDatabase();
     }
 
     /**
@@ -63,7 +63,7 @@ public class DBManager {
      * @param strPayType
      * @return 构建好的ContentValues对象
      */
-    ContentValues newRecord(String strCategory,
+    ContentValues fillNewRecord(String strCategory,
                                    String strEvent,
                                    String strPrice,
                                    String strLocation,
@@ -72,7 +72,7 @@ public class DBManager {
                                    String strPayType){
 
         ContentValues values = new ContentValues();
-        // ContenValues Key只能是String类型，Value只能存储基本类型数据，不能存储对象
+        // ContentValues Key只能是String类型，Value只能存储基本类型数据，不能存储对象
         values.put(CMyDBHelper.FIELD_CATEGORY, strCategory);
         values.put(CMyDBHelper.FIELD_EVENT, strEvent);
         values.put(CMyDBHelper.FIELD_PRICE, convertPriceToInt(strPrice));
@@ -94,7 +94,7 @@ public class DBManager {
 
     long insertRecord(String table, ContentValues values){
         // 调用insert()方法将数据插入到数据库当中
-        long id = getWriteDatabase().insert(table, null, values);
+        long id = getWriteDBHandler().insert(table, null, values);
         MyLog.d(TAG, "saveTransactionToDB ret id:"+id);
         return id;
     }
@@ -109,14 +109,14 @@ public class DBManager {
      * @param orderBy
      * @return
      */
-    ArrayList<ContentValues> queryRecordTable(String[] columns,
+    ArrayList<ContentValues> getRecordList(String[] columns,
                                                       String selection,
                                                       String[] selectionArgs,
                                                       String groupBy,
                                                       String having,
                                                       String orderBy) {
 
-        Cursor cursor = getWriteDatabase().query(CMyDBHelper.TABLE_NAME_RECORD, columns, selection, selectionArgs, groupBy, having, orderBy);
+        Cursor cursor = getWriteDBHandler().query(CMyDBHelper.TABLE_NAME_RECORD, columns, selection, selectionArgs, groupBy, having, orderBy);
         // Error
         if (cursor == null) {
             MyLog.w(TAG, "MyCFO WorkThread query fail. cursor == null.");
@@ -142,7 +142,7 @@ public class DBManager {
             value = new ContentValues();
 
             for(int i=0; i<columnsCnt;i++) {
-                if(columns[i].equals(mDbHelper.FIELD_PRICE)) {
+                if(columns[i].equals(CMyDBHelper.FIELD_PRICE)) {
                     value.put(columns[i], showPrice(cursor.getInt(i)));
                 }else{
                     value.put(columns[i], cursor.getString(i));
@@ -160,7 +160,7 @@ public class DBManager {
      * @param db 数据库
      * @param table 表名
      */
-    synchronized void deleteDatas(SQLiteDatabase db, String table)
+    synchronized void deleteAllTableData(SQLiteDatabase db, String table)
     {
         String sql="delete from "+ table;
         db.execSQL(sql);
@@ -169,19 +169,19 @@ public class DBManager {
      * 打开数据库写连接
      * @return
      */
-    SQLiteDatabase getWriteDatabase(){
-        if(null == mDbWriteConnection){
-            mDbWriteConnection = mDbHelper.getWritableDatabase();
+    SQLiteDatabase getWriteDBHandler(){
+        if(null == mDBWriteHandler){
+            mDBWriteHandler = mDbHelper.getWritableDatabase();
         }
-        return mDbWriteConnection;
+        return mDBWriteHandler;
     }
 
     /**
      * 关闭数据库连接
      */
     public void closeDatabase(){
-        if(null != mDbWriteConnection){
-            mDbWriteConnection.close();
+        if(null != mDBWriteHandler){
+            mDBWriteHandler.close();
         }
     }
 
@@ -204,7 +204,7 @@ public class DBManager {
      */
     private void execSQL(String sql){
         //直接执行sql语句
-        getWriteDatabase().execSQL(sql);//或者
+        getWriteDBHandler().execSQL(sql);
     }
 
     private ArrayList<ContentValues> setReturnCode(int returnCode){
