@@ -21,6 +21,10 @@ public class DBManager {
     public static final int RETCODE_VALUE_NO_RECORD  = 1;
     public static final int RETCODE_VALUE_QUERY_FAIL = 2;
 
+    public static final int CONDITION_BY_YEAR  = 1;
+    public static final int CONDITION_BY_MONTH = 2;
+    public static final int CONDITION_BY_WEEK  = 3;
+
     // 静态引用
     private volatile static DBManager mInstance;
     // DatabaseHelper

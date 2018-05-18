@@ -117,8 +117,10 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public List<ContentValues> queryRecordList(int days){
-        MyLog.d(TAG, "TabMenuActivity  queryRecordList ok" );
+        MyLog.d(TAG, "TabMenuActivity  queryRecordList Begin" );
         if(null != mCFOServiceBinder) {
+
+            mCFOServiceBinder.getAllRecords(1,2018);
             return mCFOServiceBinder.listRecords(days);
         }else{
             return null;
