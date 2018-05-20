@@ -59,5 +59,6 @@
     <string name="const_string_me">我</string>
 
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="api_error_msg">Error: there is a error when doing something!</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
