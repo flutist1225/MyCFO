@@ -1,18 +1,20 @@
-package com.changda123.www.mycfo;
+package com.changda123.www.mycfo.Account.RecordList;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioGroup;
+
+import com.changda123.www.mycfo.BaseClass.BaseFragment;
+import com.changda123.www.mycfo.MainActivity;
+import com.changda123.www.mycfo.R;
+import com.changda123.www.mycfo.Util.MyLog;
 
 import java.util.List;
 
@@ -22,7 +24,7 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class ListRecordFragment extends Fragment {
+public class ListRecordFragment extends BaseFragment implements IListRecordView{
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -36,6 +38,7 @@ public class ListRecordFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
     private boolean mIsSetAdapter = false;
 
+    ListRecordPresenter mPresenter;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -60,15 +63,26 @@ public class ListRecordFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+
+        mPresenter = new ListRecordPresenter();
+        mPresenter.attachView(this);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_listrecord_list, container, false);
-        MyLog.d(TAG, "ListRecordFragment  onCreateView ok" );
-        // Set the adapter
+    public void onDestroy() {
+        super.onDestroy();
+        //断开View引用
+        mPresenter.detachView();
+    }
 
+    @Override
+    public int getContentViewId() {
+        return R.layout.fragment_listrecord_list;
+    }
+
+    @Override
+    protected void initMembersView(Bundle savedInstanceState) {
+        final View view = mRootView;
         Context context = view.getContext();
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewId);
         if (mColumnCount <= 1) {
@@ -77,11 +91,43 @@ public class ListRecordFragment extends Fragment {
             mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
         mRecyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
-        initView(view);
 
-        return view;
+
+        mRadioGroupQueryRange = (RadioGroup) view.findViewById(R.id.idRadioGroupQueryRange);
+
+        mButtonQuery = (Button)view.findViewById(R.id.idButtonQueryList);
+
+        mButtonQuery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int days;
+                // 检查必选参数
+                int radioId = mRadioGroupQueryRange.getCheckedRadioButtonId();
+                switch (radioId) {
+                    case R.id.idRadioButton1week:
+                        days = 7;
+                        break;
+                    case R.id.idRadioButton1month:
+                        days = 30;
+                        break;
+                    case R.id.idRadioButton3month:
+                        days = 92;
+                        break;
+                    case R.id.idRadioButton6month:
+                        days = 183;
+                        break;
+                    case R.id.idRadioButton1year:
+                        days = 365;
+                        break;
+                    default:
+                        days = 30;
+                        break;
+                }
+                MyLog.d(TAG, "initView  days:" + days);
+                mPresenter.listRecords(days);
+            }
+        });
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -101,6 +147,11 @@ public class ListRecordFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void showRecords(List<ContentValues> data) {
+        setRecyclerViewAdpter(data);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -114,43 +165,6 @@ public class ListRecordFragment extends Fragment {
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(ContentValues item);
-    }
-
-    private void initView(final View view){
-        mRadioGroupQueryRange = (RadioGroup) view.findViewById(R.id.idRadioGroupQueryRange);
-
-        mButtonQuery = (Button)view.findViewById(R.id.idButtonQueryList);
-        mButtonQuery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int days;
-                // 检查必选参数
-                int radioId = mRadioGroupQueryRange.getCheckedRadioButtonId();
-                switch (radioId){
-                    case R.id.idRadioButton1week:
-                        days=7;
-                        break;
-                    case R.id.idRadioButton1month:
-                        days=30;
-                        break;
-                    case R.id.idRadioButton3month:
-                        days=92;
-                        break;
-                    case R.id.idRadioButton6month:
-                        days=183;
-                        break;
-                    case R.id.idRadioButton1year:
-                        days=365;
-                        break;
-                    default:
-                        days=30;
-                        break;
-                }
-                MyLog.d(TAG, "initView  days:" + days );
-                List<ContentValues> listData =  ((MainActivity)getActivity()).queryRecordList(days);
-                setRecyclerViewAdpter(listData);
-            }
-        });
     }
 
     void setRecyclerViewAdpter(List recordList){

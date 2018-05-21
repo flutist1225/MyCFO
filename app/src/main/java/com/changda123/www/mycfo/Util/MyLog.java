@@ -1,6 +1,8 @@
-package com.changda123.www.mycfo;
+package com.changda123.www.mycfo.Util;
 
 import android.util.Log;
+
+import com.changda123.www.mycfo.BuildConfig;
 
 public class MyLog {
     private static final int MYLOG_LEVEL_VERBOSE = 0;

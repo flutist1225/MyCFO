@@ -1,4 +1,4 @@
-package com.changda123.www.mycfo;
+package com.changda123.www.mycfo.Account.RecordList;
 
 import android.content.ContentValues;
 import android.support.v7.widget.RecyclerView;
@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.changda123.www.mycfo.ListRecordFragment.OnListFragmentInteractionListener;
+import com.changda123.www.mycfo.Account.RecordList.ListRecordFragment.OnListFragmentInteractionListener;
+import com.changda123.www.mycfo.CMyDBHelper;
+import com.changda123.www.mycfo.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

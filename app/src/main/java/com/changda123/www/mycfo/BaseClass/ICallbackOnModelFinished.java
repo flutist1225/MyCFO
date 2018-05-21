@@ -1,6 +1,10 @@
 package com.changda123.www.mycfo.BaseClass;
 
-public interface ICallback <T> {
+/**
+ * 给Model回调，实现在presenter
+ * @param <T>
+ */
+public interface ICallbackOnModelFinished<T> {
 
     /**
      * 数据请求成功

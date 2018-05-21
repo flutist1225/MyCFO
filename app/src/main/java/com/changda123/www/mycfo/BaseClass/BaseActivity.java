@@ -1,6 +1,5 @@
 package com.changda123.www.mycfo.BaseClass;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -36,6 +35,9 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
     public void showToast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
+    @Override
+    public void showFailureMessage(String msg){showToast(getResources().getString(R.string.api_failure_msg));}
+
     @Override
     public void showErr() {
         showToast(getResources().getString(R.string.api_error_msg));

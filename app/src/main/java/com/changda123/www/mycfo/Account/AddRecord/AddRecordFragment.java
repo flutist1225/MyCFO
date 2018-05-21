@@ -1,26 +1,25 @@
-package com.changda123.www.mycfo;
+package com.changda123.www.mycfo.Account.AddRecord;
 
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.changda123.www.mycfo.BaseClass.BaseFragment;
+import com.changda123.www.mycfo.MainActivity;
+import com.changda123.www.mycfo.R;
+import com.changda123.www.mycfo.Util.RadioGroupEx;
 
 
 /**
+ * 实现了UI的公共接口IBaseView和IAddRecordView接口
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * {@link AddRecordFragment.OnFragmentInteractionListener} interface
@@ -28,14 +27,14 @@ import android.widget.Toast;
  * Use the {@link AddRecordFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddRecordFragment extends Fragment {
+public class AddRecordFragment extends BaseFragment implements IAddRecordView {
     public static final String TAG = "MyCFO_AddRecordFragment";
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    View mView;
 
+    AddRecordPresenter mPresenter;
 
     private RadioGroupEx mRadioGroupCaletory;
     private RadioButton mRadioButtonCalegory;
@@ -86,15 +85,16 @@ public class AddRecordFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        mPresenter = new AddRecordPresenter();
+        mPresenter.attachView(this);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        mView = inflater.inflate(R.layout.fragment_add_record, container, false);
-        initView(mView);
-        return mView;
+    public void onDestroy() {
+        super.onDestroy();
+        //断开View引用
+        mPresenter.detachView();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -121,23 +121,14 @@ public class AddRecordFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public int getContentViewId() {
+        return R.layout.fragment_add_record;
     }
 
-    private void initView(final View view){
-
+    @Override
+    protected void initMembersView(Bundle savedInstanceState) {
+        final View view = mRootView;
         mRadioGroupCaletory = (RadioGroupEx) view.findViewById(R.id.idRadioGroupCalegory);
 
         mTextEvent = (TextView) view.findViewById(R.id.idEditTextEvent);
@@ -153,13 +144,13 @@ public class AddRecordFragment extends Fragment {
         Button quickKeyButtonRestuarant   = (Button) view.findViewById(R.id.idButtonRestaurant);
 
         quickKeyButtonStopCar.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-                 mTextEvent.setText(R.string.quickKey_stop_car);
-                 mRadioGroupCaletory.check(R.id.radioButtonRun);
-                 mTextPrice.setText(R.string.const_string_10);
-             }
-         });
+            @Override
+            public void onClick(View v) {
+                mTextEvent.setText(R.string.quickKey_stop_car);
+                mRadioGroupCaletory.check(R.id.radioButtonRun);
+                mTextPrice.setText(R.string.const_string_10);
+            }
+        });
         quickKeyButtonBuyVegetable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -209,6 +200,14 @@ public class AddRecordFragment extends Fragment {
                 }
 
                 // Add new record
+                mPresenter.AddRecord(mRadioButtonCalegory.getText().toString(),
+                        mTextEvent.getText().toString(),
+                        mTextPrice.getText().toString(),
+                        mTextLocation.getText().toString(),
+                        datetime,
+                        mTextWho.getText().toString(),
+                        payType);
+                /*
                 ((MainActivity)getActivity()).addNewRecord(
                         mRadioButtonCalegory.getText().toString(),
                         mTextEvent.getText().toString(),
@@ -217,9 +216,25 @@ public class AddRecordFragment extends Fragment {
                         datetime,
                         mTextWho.getText().toString(),
                         payType);
-
+                */
             }
         });
-
     }
+
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
+
 }

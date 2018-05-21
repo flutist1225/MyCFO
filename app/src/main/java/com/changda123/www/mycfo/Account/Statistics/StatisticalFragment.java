@@ -1,44 +1,46 @@
-package com.changda123.www.mycfo;
+package com.changda123.www.mycfo.Account.Statistics;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+
+import com.changda123.www.mycfo.BaseClass.BaseFragment;
+import com.changda123.www.mycfo.R;
+import com.github.mikephil.charting.charts.LineChart;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link AccountMainFragment.OnFragmentInteractionListener} interface
+ * {@link StatisticalFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link AccountMainFragment#newInstance} factory method to
+ * Use the {@link StatisticalFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AccountMainFragment extends Fragment {
-
-    private static final String TAG = "MyCFO_AccountMainFragment";
-
+public class StatisticalFragment extends BaseFragment implements IStatisticsView {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    View mView;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private StatisticsPresenter mPresenter;
 
-    public AccountMainFragment() {
+    public StatisticalFragment() {
         // Required empty public constructor
     }
 
@@ -48,11 +50,11 @@ public class AccountMainFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment AccountMainFragment.
+     * @return A new instance of fragment StatisticalFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AccountMainFragment newInstance(String param1, String param2) {
-        AccountMainFragment fragment = new AccountMainFragment();
+    public static StatisticalFragment newInstance(String param1, String param2) {
+        StatisticalFragment fragment = new StatisticalFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -67,31 +69,21 @@ public class AccountMainFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        mPresenter = new StatisticsPresenter();
+        mPresenter.attachView(this);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        MyLog.d(TAG, "TabMenuActivity  onCreate" );
-        mView = inflater.inflate(R.layout.fragment_account_main, container, false);
-        initTabView();
-        return mView;
+    public int getContentViewId() {
+        return R.layout.fragment_statistical;
     }
 
-    private void initTabView(){
-        TabLayout tabLayout = (TabLayout)mView.findViewById(R.id.tab) ;
-        ViewPager viewpager = (ViewPager)mView.findViewById(R.id.viewpager);
-        List<Fragment> fragments = new ArrayList<>();
+    @Override
+    protected void initMembersView(Bundle savedInstanceState) {
+        LineChart chart = (LineChart) mRootView.findViewById(R.id.chart);
+        TextView sumValue = (TextView) mRootView.findViewById(R.id.statisticIdtext);
 
-        fragments.add(new AddRecordFragment());
-        fragments.add(new ListRecordFragment());
-        fragments.add(new StatisticalFragment());
-
-        TitleFragmentPagerAdapter adapter = new TitleFragmentPagerAdapter(getChildFragmentManager(), fragments, new String[]{"新增交易", "交易记录", "统计报表"});
-        viewpager.setAdapter(adapter);
-
-        tabLayout.setupWithViewPager(viewpager);
+        List<Map.Entry> entries = new ArrayList<>();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -116,6 +108,11 @@ public class AccountMainFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void showRecords(List<ContentValues> data) {
+
     }
 
     /**

@@ -7,7 +7,12 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.changda123.www.mycfo.Util.MyLog;
+
 import java.io.File;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -15,6 +20,7 @@ public class CMyDBHelper extends SQLiteOpenHelper{
     private static final String TAG = "MyCFO_CMyDBHelper";
     //数据库的版本号
     private static final int DATABASE_VERSION = 1001;
+
 
     //数据库名称
     private static final String DATABASE_NAME = "MyCFO.db";
@@ -45,9 +51,26 @@ public class CMyDBHelper extends SQLiteOpenHelper{
     public static final String FIELD_NAME_PAY_TYPE = "name";
     //自定义类别和Person的最大字符数
     private static final int MAX_CHAR_NUMBER = 10;
+    // 静态引用
+    private volatile static CMyDBHelper mInstance;
+    private SQLiteDatabase mDBWriteHandler;
 
-    public CMyDBHelper(Context context) {
+    private CMyDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    public static CMyDBHelper getInstance(Context context) {
+        CMyDBHelper inst = mInstance;
+        if (inst == null) {
+            synchronized (CMyDBHelper.class) {
+                inst = mInstance;
+                if (inst == null) {
+                    inst = new CMyDBHelper(context);
+                    mInstance = inst;
+                }
+            }
+        }
+        return inst;
     }
 
     @Override
@@ -216,6 +239,142 @@ public class CMyDBHelper extends SQLiteOpenHelper{
      */
     private synchronized void deleteDB(String db){
         SQLiteDatabase.deleteDatabase(new File(db));
+    }
+    /**
+     * 删除指定表的所有数据
+     * @param db 数据库
+     * @param table 表名
+     */
+    synchronized void deleteAllTableData(SQLiteDatabase db, String table)
+    {
+        String sql="delete from "+ table;
+        db.execSQL(sql);
+    }
+
+    /******************* 数据库记录操作开始 *************************************/
+    /**
+     * 打开数据库写连接
+     * @return
+     */
+    public SQLiteDatabase getWriteDBHandler(){
+        if(null == mDBWriteHandler){
+            mDBWriteHandler = mInstance.getWritableDatabase();
+        }
+        return mDBWriteHandler;
+    }
+    /**
+     * 关闭数据库连接
+     */
+    public void closeDatabase(){
+        if(null != mDBWriteHandler){
+            mDBWriteHandler.close();
+        }
+    }
+
+    /**
+     * 执行sql语句
+     */
+    private void execSQL(String sql){
+        //直接执行sql语句
+        getWriteDBHandler().execSQL(sql);
+    }
+
+    public long insertRecord(String table, ContentValues values){
+        // 调用insert()方法将数据插入到数据库当中
+        long id = getWriteDBHandler().insert(table, null, values);
+        MyLog.d(TAG, "insertRecord ret id:"+id);
+        return id;
+    }
+
+    public ArrayList<ContentValues> getListOfRecord(
+                                                    String table,
+                                                    String[] columns,
+                                                    String selection,
+                                                    String[] selectionArgs,
+                                                    String groupBy,
+                                                    String having,
+                                                    String orderBy) {
+
+        Cursor cursor = getWriteDBHandler().query(table, columns, selection, selectionArgs, groupBy, having, orderBy);
+
+        // return records
+        ArrayList<ContentValues> list = new ArrayList<>();
+        int columnsCnt = columns.length;
+        ContentValues value;
+        //遍历Cursor
+        while(cursor.moveToNext()){
+            value = new ContentValues();
+
+            for(int i=0; i<columnsCnt;i++) {
+                if(columns[i].equals(CMyDBHelper.FIELD_PRICE)) {
+                    value.put(columns[i], showPrice(cursor.getInt(i)));
+                }else{
+                    value.put(columns[i], cursor.getString(i));
+                }
+            }
+            list.add(value);
+        }
+        cursor.close();
+        return list;
+    }
+    public long deleteRecord(String table, String whereClause, String[] whereArgs){
+        // 调用insert()方法将数据插入到数据库当中
+        long id = getWriteDBHandler().delete(table, whereClause, whereArgs);
+        MyLog.d(TAG, "delRecord ret id:"+id);
+        return id;
+    }
+
+    public long updateRecord(String table, ContentValues values, String whereClause, String[] whereArgs){
+        // 调用insert()方法将数据插入到数据库当中
+        long id = getWriteDBHandler().update(table, values, whereClause, whereArgs);
+        MyLog.d(TAG, "updateRecord ret id:"+id);
+        return id;
+    }
+
+
+
+
+    private static int convertPriceToInt(String price){
+        return (int)(Float.parseFloat(price)*100);
+    }
+    private String showPrice(int iPrice){
+        float num= (float)iPrice/100;
+        DecimalFormat df = new DecimalFormat("0.00");
+        return df.format(num);
+    }
+
+    private static String dateToString(Date date) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss") ;
+        return  format.format(date);
+    }
+
+    public ContentValues fillNewRecord(String strCategory,
+                                       String strEvent,
+                                       String strPrice,
+                                       String strLocation,
+                                       long lngTime,
+                                       String strWho,
+                                       String strPayType){
+
+        ContentValues values = new ContentValues();
+        // ContentValues Key只能是String类型，Value只能存储基本类型数据，不能存储对象
+        values.put(CMyDBHelper.FIELD_CATEGORY, strCategory);
+        values.put(CMyDBHelper.FIELD_EVENT, strEvent);
+        values.put(CMyDBHelper.FIELD_PRICE, CMyDBHelper.convertPriceToInt(strPrice));
+        values.put(CMyDBHelper.FIELD_LOCATION, strLocation);
+        values.put(CMyDBHelper.FIELD_TIME, lngTime);
+        values.put(CMyDBHelper.FIELD_DISPLAY_TIME, CMyDBHelper.dateToString(new Date(lngTime)));
+        values.put(CMyDBHelper.FIELD_WHO, strWho);
+        values.put(CMyDBHelper.FIELD_PAY_TYPE, strPayType);
+
+        Date date = new Date(lngTime);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        values.put(CMyDBHelper.FIELD_YEAR,  cal.get(Calendar.YEAR));
+        values.put(CMyDBHelper.FIELD_MONTH, cal.get(Calendar.MONTH) + 1);
+        values.put(CMyDBHelper.FIELD_WEEK,  cal.get(Calendar.WEEK_OF_YEAR));
+
+        return values;
     }
 
 }

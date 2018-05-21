@@ -1,34 +1,42 @@
-package com.changda123.www.mycfo;
+package com.changda123.www.mycfo.Account;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-
-import com.github.mikephil.charting.charts.LineChart;
+import com.changda123.www.mycfo.Account.AddRecord.AddRecordFragment;
+import com.changda123.www.mycfo.Account.RecordList.ListRecordFragment;
+import com.changda123.www.mycfo.Util.MyLog;
+import com.changda123.www.mycfo.R;
+import com.changda123.www.mycfo.Account.Statistics.StatisticalFragment;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link StatisticalFragment.OnFragmentInteractionListener} interface
+ * {@link AccountMainFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link StatisticalFragment#newInstance} factory method to
+ * Use the {@link AccountMainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class StatisticalFragment extends Fragment {
+public class AccountMainFragment extends Fragment {
+
+    private static final String TAG = "MyCFO_AccountMainFragment";
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    View mView;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -36,7 +44,7 @@ public class StatisticalFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public StatisticalFragment() {
+    public AccountMainFragment() {
         // Required empty public constructor
     }
 
@@ -46,11 +54,11 @@ public class StatisticalFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment StatisticalFragment.
+     * @return A new instance of fragment AccountMainFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static StatisticalFragment newInstance(String param1, String param2) {
-        StatisticalFragment fragment = new StatisticalFragment();
+    public static AccountMainFragment newInstance(String param1, String param2) {
+        AccountMainFragment fragment = new AccountMainFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -71,14 +79,25 @@ public class StatisticalFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_statistical, container, false);
-        LineChart chart = (LineChart) view.findViewById(R.id.chart);
-        TextView sumValue = (TextView) view.findViewById(R.id.statisticIdtext);
+        MyLog.d(TAG, "TabMenuActivity  onCreate" );
+        mView = inflater.inflate(R.layout.fragment_account_main, container, false);
+        initTabView();
+        return mView;
+    }
 
-        List<Map.Entry> entries = new ArrayList<>();
+    private void initTabView(){
+        TabLayout tabLayout = (TabLayout)mView.findViewById(R.id.tab) ;
+        ViewPager viewpager = (ViewPager)mView.findViewById(R.id.viewpager);
+        List<Fragment> fragments = new ArrayList<>();
 
+        fragments.add(new AddRecordFragment());
+        fragments.add(new ListRecordFragment());
+        fragments.add(new StatisticalFragment());
 
-        return view;
+        TitleFragmentPagerAdapter adapter = new TitleFragmentPagerAdapter(getChildFragmentManager(), fragments, new String[]{"新增交易", "交易记录", "统计报表"});
+        viewpager.setAdapter(adapter);
+
+        tabLayout.setupWithViewPager(viewpager);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -2,23 +2,27 @@ package com.changda123.www.mycfo;
 
 import android.content.ComponentName;
 import android.content.ContentValues;
-import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.changda123.www.mycfo.Account.AccountMainFragment;
+import com.changda123.www.mycfo.Account.AddRecord.AddRecordFragment;
+import com.changda123.www.mycfo.Account.RecordList.ListRecordFragment;
+import com.changda123.www.mycfo.Account.Statistics.StatisticalFragment;
+import com.changda123.www.mycfo.BaseClass.BaseActivity;
+import com.changda123.www.mycfo.Util.MyLog;
+
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements
+public class MainActivity extends BaseActivity implements
         AccountMainFragment.OnFragmentInteractionListener,
         AddRecordFragment.OnFragmentInteractionListener,
         ListRecordFragment.OnListFragmentInteractionListener,
@@ -28,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements
 
     private static final String DEFAULT_FRAGMENT = "mainFragment";
 
-    MyCFOService.MyCFOServiceBinder mCFOServiceBinder;
     private TextView mTextMessage;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -63,12 +66,6 @@ public class MainActivity extends AppCompatActivity implements
 
         loadDefaultFragment();
 
-        // 连接后台Service组件
-        Intent startServiceIntent = new Intent(this, MyCFOService.class);
-        if(null == startService(startServiceIntent)){
-            new Throwable("无法启动服务");
-        }
-        bindService(startServiceIntent, mConnection, BIND_AUTO_CREATE);
     }
 
     @Override
@@ -92,40 +89,6 @@ public class MainActivity extends AppCompatActivity implements
         transaction.commit();
     }
 
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mCFOServiceBinder = (MyCFOService.MyCFOServiceBinder) service;
-            MyLog.d(TAG, "TabMenuActivity  onServiceConnected ok" );
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            MyLog.d(TAG, "TabMenuActivity onServiceDisconnected ok");
-        }
-    };
-
-    public void addNewRecord(String strCategory,
-                             String strEvent,
-                             String strPrice,
-                             String strLocation,
-                             long   lngTime,
-                             String strWho,
-                             String strPayType){
-        mCFOServiceBinder.commitTransaction(strCategory, strEvent, strPrice, strLocation, lngTime,strWho, strPayType);
-    }
-
-    public List<ContentValues> queryRecordList(int days){
-        MyLog.d(TAG, "TabMenuActivity  queryRecordList Begin" );
-        if(null != mCFOServiceBinder) {
-
-            mCFOServiceBinder.getAllRecords(1,2018);
-            return mCFOServiceBinder.listRecords(days);
-        }else{
-            return null;
-        }
-    }
 
     @Override
     public void onFragmentInteraction(Uri uri) {

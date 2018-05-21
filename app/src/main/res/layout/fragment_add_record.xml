@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".AddRecordFragment"
+    tools:context=".Account.AddRecord.AddRecordFragment"
     android:orientation="vertical">
 
     <ScrollView
@@ -73,7 +73,7 @@
                     tools:layout_editor_absoluteX="16dp"
                     tools:layout_editor_absoluteY="43dp" />
 
-                <com.changda123.www.mycfo.RadioGroupEx
+                <com.changda123.www.mycfo.Util.RadioGroupEx
                     android:id="@+id/idRadioGroupCalegory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -143,7 +143,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/category_name_debt" />
-                </com.changda123.www.mycfo.RadioGroupEx>
+                </com.changda123.www.mycfo.Util.RadioGroupEx>
             </LinearLayout>
 
             <LinearLayout

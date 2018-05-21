@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 public abstract class BaseFragment extends Fragment implements IBaseView {
     public abstract int getContentViewId();
-    protected abstract void initAllMembersView(Bundle savedInstanceState);
+    protected abstract void initMembersView(Bundle savedInstanceState);
     protected Context mContext;
     protected View mRootView;
 
@@ -19,7 +19,7 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRootView = inflater.inflate(getContentViewId(), container, false);
         this.mContext = getActivity();
-        initAllMembersView(savedInstanceState);
+        initMembersView(savedInstanceState);
         return mRootView;
     }
     @Override
@@ -38,6 +38,13 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
         checkActivityAttached();
         ((BaseActivity) mContext).showToast(msg);
     }
+
+    @Override
+    public void showFailureMessage(String msg) {
+        checkActivityAttached();
+        ((BaseActivity) mContext).showFailureMessage(msg);
+    }
+
     @Override
     public void showErr() {
         checkActivityAttached();

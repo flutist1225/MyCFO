@@ -71,7 +71,7 @@
         android:name="com.changda123.www.mycfo.ListRecordFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ListRecordFragment"
+        tools:context=".Account.RecordList.ListRecordFragment"
         tools:listitem="@layout/fragment_listrecord">
 
     </android.support.v7.widget.RecyclerView>
