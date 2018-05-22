@@ -20,6 +20,17 @@ public class StatisticsPresenter extends BasePresenter<IStatisticsView> implemen
         return mDataModel.getFieldNameCategory();
     }
 
+    public String getFieldNamePeriodYear(){
+        return mDataModel.getFieldNamePeriod(AccountBaseModel.STATISTIC_PERIOD_BY_YEAR);
+    }
+
+    public String getFieldNamePeriodMonth(){
+        return mDataModel.getFieldNamePeriod(AccountBaseModel.STATISTIC_PERIOD_BY_MONTH);
+    }
+    public String getFieldNamePeriodWeek(){
+        return mDataModel.getFieldNamePeriod(AccountBaseModel.STATISTIC_PERIOD_BY_WEEK);
+    }
+
     public String getFieldNameSumPrice(){
         return mDataModel.getFieldNameSumPrice();
     }

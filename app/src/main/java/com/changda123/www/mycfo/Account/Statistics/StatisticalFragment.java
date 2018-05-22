@@ -11,9 +11,14 @@ import android.widget.TextView;
 
 import com.changda123.www.mycfo.BaseClass.BaseFragment;
 import com.changda123.www.mycfo.R;
+import com.changda123.www.mycfo.Util.BarChartManager;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -21,6 +26,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +52,8 @@ public class StatisticalFragment extends BaseFragment implements IStatisticsView
     private OnFragmentInteractionListener mListener;
     private StatisticsPresenter mPresenter;
     private PieChart mPieChart;
+    private BarChart mBarChart;
+
 
     public StatisticalFragment() {
         // Required empty public constructor
@@ -87,13 +95,15 @@ public class StatisticalFragment extends BaseFragment implements IStatisticsView
 
     @Override
     protected void initMembersView(Bundle savedInstanceState) {
-        BarChart barChartTotal = (BarChart) mRootView.findViewById(R.id.bar_chart_total);
-        mPieChart      = (PieChart) mRootView.findViewById(R.id.pie_chart_total);
+        mBarChart = (BarChart) mRootView.findViewById(R.id.bar_chart_total);
+        mPieChart = (PieChart) mRootView.findViewById(R.id.pie_chart_total);
         BarChart barChartone   = (BarChart) mRootView.findViewById(R.id.bar_chart_one);
         TextView sumValue      = (TextView) mRootView.findViewById(R.id.statisticIdtext);
 
-        mPresenter.querySubtotalGroupByCategory(1, 2018);
 
+        //mPresenter.querySubtotalGroupByCategory(1, 2018);
+        Date beginDate = new Date(2018-1900, 1, 1);
+        mPresenter.queryTotalGroupByPeriod(3, beginDate.getTime());
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -122,6 +132,37 @@ public class StatisticalFragment extends BaseFragment implements IStatisticsView
 
     @Override
     public void showRecords(List<ContentValues> data) {
+        //showPieChart(data);
+        showBarChart(data);
+    }
+
+    private void showBarChart(List<ContentValues> data) {
+        int periodType = 3;
+        BarChartManager barChartManager1 = new BarChartManager(mBarChart);
+
+        //x轴的数据
+        ArrayList<Float> xValues = new ArrayList<>();
+        //y轴的数据()
+        ArrayList<Float> yValues = new ArrayList<>();
+        String xFieldName;
+        if(periodType == 3){
+            xFieldName = mPresenter.getFieldNamePeriodWeek();
+        }else if(periodType == 1){
+            xFieldName = mPresenter.getFieldNamePeriodWeek();
+        }else{
+            xFieldName = mPresenter.getFieldNamePeriodMonth();
+        }
+        for (ContentValues node : data){
+
+            xValues.add(node.getAsFloat(xFieldName));
+            yValues.add(node.getAsFloat(mPresenter.getFieldNameSumPrice()));
+
+        }
+
+        barChartManager1.showBarChart(xValues, yValues, getString(R.string.statistic_period_compare_all), Color.RED);
+    }
+
+    private void showPieChart(List<ContentValues> data) {
         Description description = new Description();
         description.setText(getString(R.string.statistic_category_compare));
         mPieChart.setDescription(description);
@@ -152,9 +193,7 @@ public class StatisticalFragment extends BaseFragment implements IStatisticsView
         PieData pieData = new PieData(dataSet);
         // pieData.setValueFormatter(new PercentFormatter());
         mPieChart.setData(pieData);
-
     }
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated

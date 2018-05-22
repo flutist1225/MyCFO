@@ -14,9 +14,9 @@ import java.util.List;
 public class AccountBaseModel  {
     private static final String TAG = "AccountBaseModel";
 
-    private static final int STATISTIC_PERIOD_BY_YEAR    = 1;
-    private static final int STATISTIC_PERIOD_BY_MONTH   = 2;
-    private static final int STATISTIC_PERIOD_BY_WEEK    = 3;
+    public static final int STATISTIC_PERIOD_BY_YEAR    = 1;
+    public static final int STATISTIC_PERIOD_BY_MONTH   = 2;
+    public static final int STATISTIC_PERIOD_BY_WEEK    = 3;
 
     private CMyDBHelper mMyDBHelper;
 
@@ -235,4 +235,18 @@ public class AccountBaseModel  {
     public String getFieldNameSumPrice(){
         return CMyDBHelper.FIELD_PRICE_SUM;
     }
+
+    public String getFieldNamePeriod(int periodType){
+        switch (periodType){
+            case STATISTIC_PERIOD_BY_YEAR:
+                return CMyDBHelper.FIELD_YEAR;
+
+            case STATISTIC_PERIOD_BY_WEEK:
+                return CMyDBHelper.FIELD_WEEK;
+            case STATISTIC_PERIOD_BY_MONTH:
+            default:
+                return CMyDBHelper.FIELD_MONTH;
+        }
+    }
+
 }
