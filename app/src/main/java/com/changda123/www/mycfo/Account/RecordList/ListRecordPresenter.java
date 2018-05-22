@@ -1,11 +1,9 @@
 package com.changda123.www.mycfo.Account.RecordList;
 
-import android.content.ContentValues;
 import android.content.Context;
 
 import com.changda123.www.mycfo.Account.AccountBaseModel;
 import com.changda123.www.mycfo.BaseClass.BasePresenter;
-import com.changda123.www.mycfo.BaseClass.IBaseModel;
 import com.changda123.www.mycfo.BaseClass.ICallbackOnModelFinished;
 
 import java.util.List;
@@ -14,7 +12,7 @@ public class ListRecordPresenter extends BasePresenter<IListRecordView> implemen
 
     public static final String TAG = "MyCFO_ListRecordPresenter";
 
-    IBaseModel mDataModel;
+    AccountBaseModel mDataModel;
 
     public ListRecordPresenter(Context context){
         mDataModel = new AccountBaseModel(context);

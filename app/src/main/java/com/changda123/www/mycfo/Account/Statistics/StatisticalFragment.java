@@ -127,12 +127,6 @@ public class StatisticalFragment extends BaseFragment implements IStatisticsView
         mPieChart.setDescription(description);
         mPieChart.setNoDataText(getString(R.string.statistic_no_data));
 
-        List<PieEntry> valueList = new ArrayList<>();
-        for (ContentValues node : data){
-            PieEntry pieData = new PieEntry(Float.parseFloat((String) node.get(mPresenter.getFieldNameSumPrice())), node.getAsString(mPresenter.getFieldNameCategory()));
-            valueList.add(pieData);
-
-        }
         List<Integer>  colors = new ArrayList<>();
         colors.add(Color.BLUE);
         colors.add(Color.GREEN);
@@ -145,7 +139,13 @@ public class StatisticalFragment extends BaseFragment implements IStatisticsView
         colors.add(Color.DKGRAY);
         colors.add(Color.CYAN);
 
-        PieDataSet dataSet = new PieDataSet(valueList,getString(R.string.column_category));
+        List<PieEntry> valueList = new ArrayList<>();
+        for (ContentValues node : data){
+            PieEntry pieData = new PieEntry(Float.parseFloat((String) node.get(mPresenter.getFieldNameSumPrice())), node.getAsString(mPresenter.getFieldNameCategory()));
+            valueList.add(pieData);
+        }
+
+        PieDataSet dataSet = new PieDataSet(valueList, getString(R.string.column_category));
         dataSet.setColors(colors);
         dataSet.setValueTextSize(20f);
 

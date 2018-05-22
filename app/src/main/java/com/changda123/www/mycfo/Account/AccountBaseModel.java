@@ -3,7 +3,6 @@ package com.changda123.www.mycfo.Account;
 import android.content.ContentValues;
 import android.content.Context;
 
-import com.changda123.www.mycfo.BaseClass.IBaseModel;
 import com.changda123.www.mycfo.BaseClass.ICallbackOnModelFinished;
 import com.changda123.www.mycfo.CMyDBHelper;
 import com.changda123.www.mycfo.Util.MyLog;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class AccountBaseModel implements IBaseModel {
+public class AccountBaseModel  {
     private static final String TAG = "AccountBaseModel";
 
     private static final int STATISTIC_PERIOD_BY_YEAR    = 1;
