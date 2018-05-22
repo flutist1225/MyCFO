@@ -55,6 +55,12 @@
     <string name="quickKey_eat_something">零食</string>
     <string name="quickKey_restaurant">聚餐</string>
 
+    <string name="statistic_no_data">暂无数据</string>
+    <string name="statistic_category_compare">分类占比图</string>
+    <string name="statistic_period_compare">趋势图</string>
+    <string name="statistic_period_compare_all">总消费趋势图</string>
+
+
     <string name="const_string_10">10</string>
     <string name="const_string_me">我</string>
 

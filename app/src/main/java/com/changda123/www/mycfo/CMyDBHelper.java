@@ -30,6 +30,7 @@ public class CMyDBHelper extends SQLiteOpenHelper{
     public static final String FIELD_CATEGORY = "category";
     public static final String FIELD_EVENT = "event";
     public static final String FIELD_PRICE = "price";
+    public static final String FIELD_PRICE_SUM = "SUM(price)";
     public static final String FIELD_LOCATION = "location";
     public static final String FIELD_TIME ="time";
     public static final String FIELD_DISPLAY_TIME ="display_time";
@@ -307,6 +308,8 @@ public class CMyDBHelper extends SQLiteOpenHelper{
 
             for(int i=0; i<columnsCnt;i++) {
                 if(columns[i].equals(CMyDBHelper.FIELD_PRICE)) {
+                    value.put(columns[i], showPrice(cursor.getInt(i)));
+                }else if(columns[i].equals(CMyDBHelper.FIELD_PRICE_SUM)) {
                     value.put(columns[i], showPrice(cursor.getInt(i)));
                 }else{
                     value.put(columns[i], cursor.getString(i));

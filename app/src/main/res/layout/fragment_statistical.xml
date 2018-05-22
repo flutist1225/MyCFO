@@ -23,9 +23,20 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
 
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/chart"
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/bar_chart_total"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/pie_chart_total"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/bar_chart_one"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
     </LinearLayout>
 </FrameLayout>

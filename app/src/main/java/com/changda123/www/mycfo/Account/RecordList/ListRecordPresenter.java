@@ -1,6 +1,7 @@
 package com.changda123.www.mycfo.Account.RecordList;
 
 import android.content.ContentValues;
+import android.content.Context;
 
 import com.changda123.www.mycfo.Account.AccountBaseModel;
 import com.changda123.www.mycfo.BaseClass.BasePresenter;
@@ -15,8 +16,8 @@ public class ListRecordPresenter extends BasePresenter<IListRecordView> implemen
 
     IBaseModel mDataModel;
 
-    public ListRecordPresenter(){
-        mDataModel = new AccountBaseModel(getView().getContext());
+    public ListRecordPresenter(Context context){
+        mDataModel = new AccountBaseModel(context);
     }
 
     public void listRecords(int days) {

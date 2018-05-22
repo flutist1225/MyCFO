@@ -64,7 +64,7 @@ public class ListRecordFragment extends BaseFragment implements IListRecordView{
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
 
-        mPresenter = new ListRecordPresenter();
+        mPresenter = new ListRecordPresenter(getContext());
         mPresenter.attachView(this);
     }
 

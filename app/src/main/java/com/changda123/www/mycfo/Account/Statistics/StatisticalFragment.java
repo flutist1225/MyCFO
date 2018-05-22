@@ -2,22 +2,28 @@ package com.changda123.www.mycfo.Account.Statistics;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 
 import com.changda123.www.mycfo.BaseClass.BaseFragment;
 import com.changda123.www.mycfo.R;
-import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,6 +45,7 @@ public class StatisticalFragment extends BaseFragment implements IStatisticsView
 
     private OnFragmentInteractionListener mListener;
     private StatisticsPresenter mPresenter;
+    private PieChart mPieChart;
 
     public StatisticalFragment() {
         // Required empty public constructor
@@ -69,7 +76,7 @@ public class StatisticalFragment extends BaseFragment implements IStatisticsView
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        mPresenter = new StatisticsPresenter();
+        mPresenter = new StatisticsPresenter(getContext());
         mPresenter.attachView(this);
     }
 
@@ -80,10 +87,13 @@ public class StatisticalFragment extends BaseFragment implements IStatisticsView
 
     @Override
     protected void initMembersView(Bundle savedInstanceState) {
-        LineChart chart = (LineChart) mRootView.findViewById(R.id.chart);
-        TextView sumValue = (TextView) mRootView.findViewById(R.id.statisticIdtext);
+        BarChart barChartTotal = (BarChart) mRootView.findViewById(R.id.bar_chart_total);
+        mPieChart      = (PieChart) mRootView.findViewById(R.id.pie_chart_total);
+        BarChart barChartone   = (BarChart) mRootView.findViewById(R.id.bar_chart_one);
+        TextView sumValue      = (TextView) mRootView.findViewById(R.id.statisticIdtext);
 
-        List<Map.Entry> entries = new ArrayList<>();
+        mPresenter.querySubtotalGroupByCategory(1, 2018);
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -112,6 +122,36 @@ public class StatisticalFragment extends BaseFragment implements IStatisticsView
 
     @Override
     public void showRecords(List<ContentValues> data) {
+        Description description = new Description();
+        description.setText(getString(R.string.statistic_category_compare));
+        mPieChart.setDescription(description);
+        mPieChart.setNoDataText(getString(R.string.statistic_no_data));
+
+        List<PieEntry> valueList = new ArrayList<>();
+        for (ContentValues node : data){
+            PieEntry pieData = new PieEntry(Float.parseFloat((String) node.get(mPresenter.getFieldNameSumPrice())), node.getAsString(mPresenter.getFieldNameCategory()));
+            valueList.add(pieData);
+
+        }
+        List<Integer>  colors = new ArrayList<>();
+        colors.add(Color.BLUE);
+        colors.add(Color.GREEN);
+        colors.add(Color.YELLOW);
+        colors.add(Color.GRAY);
+        colors.add(Color.RED);
+        colors.add(Color.MAGENTA);
+        colors.add(Color.LTGRAY);
+        colors.add(Color.BLACK);
+        colors.add(Color.DKGRAY);
+        colors.add(Color.CYAN);
+
+        PieDataSet dataSet = new PieDataSet(valueList,getString(R.string.column_category));
+        dataSet.setColors(colors);
+        dataSet.setValueTextSize(20f);
+
+        PieData pieData = new PieData(dataSet);
+        // pieData.setValueFormatter(new PercentFormatter());
+        mPieChart.setData(pieData);
 
     }
 

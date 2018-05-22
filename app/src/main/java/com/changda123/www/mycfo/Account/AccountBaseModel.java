@@ -110,7 +110,7 @@ public class AccountBaseModel implements IBaseModel {
      */
     public void querySubtotalGroupByCategory(int periodType, int periodValue, ICallbackOnModelFinished<List> callback) {
 
-        String[] columns = {CMyDBHelper.FIELD_CATEGORY, "SUM(" + CMyDBHelper.FIELD_PRICE + ")"};
+        String[] columns = {CMyDBHelper.FIELD_CATEGORY, CMyDBHelper.FIELD_PRICE_SUM};
         String groupBy = CMyDBHelper.FIELD_CATEGORY;
 
         String selection = null;
@@ -154,18 +154,18 @@ public class AccountBaseModel implements IBaseModel {
 
         switch (periodType) {
             case STATISTIC_PERIOD_BY_YEAR:
-                columns   = new String[]{CMyDBHelper.FIELD_YEAR, "SUM(" + CMyDBHelper.FIELD_PRICE + ")"};
+                columns   = new String[]{CMyDBHelper.FIELD_YEAR, CMyDBHelper.FIELD_PRICE_SUM};
                 selection = CMyDBHelper.FIELD_TIME + ">" + beginTime;
                 groupBy   = CMyDBHelper.FIELD_YEAR;
                 break;
             case STATISTIC_PERIOD_BY_WEEK:
-                columns   = new String[]{CMyDBHelper.FIELD_WEEK, "SUM(" + CMyDBHelper.FIELD_PRICE + ")"};
+                columns   = new String[]{CMyDBHelper.FIELD_WEEK, CMyDBHelper.FIELD_PRICE_SUM};
                 selection = CMyDBHelper.FIELD_TIME + ">" + beginTime;
                 groupBy   = CMyDBHelper.FIELD_WEEK;
                 break;
             case STATISTIC_PERIOD_BY_MONTH:
             default:
-                columns   = new String[]{CMyDBHelper.FIELD_MONTH, "SUM(" + CMyDBHelper.FIELD_PRICE + ")"};
+                columns   = new String[]{CMyDBHelper.FIELD_MONTH, CMyDBHelper.FIELD_PRICE_SUM};
                 selection = CMyDBHelper.FIELD_TIME + ">" + beginTime;
                 groupBy   = CMyDBHelper.FIELD_MONTH;
                 break;
@@ -196,14 +196,14 @@ public class AccountBaseModel implements IBaseModel {
 
         switch (periodType) {
             case STATISTIC_PERIOD_BY_YEAR:
-                columns = new String[]{CMyDBHelper.FIELD_YEAR, "SUM(" + CMyDBHelper.FIELD_PRICE + ")"};
+                columns = new String[]{CMyDBHelper.FIELD_YEAR, CMyDBHelper.FIELD_PRICE_SUM};
                 selection = CMyDBHelper.FIELD_TIME + " > " + beginTime + " AND " +
                         CMyDBHelper.FIELD_CATEGORY + " = " + catogery;
 
                 groupBy = CMyDBHelper.FIELD_YEAR;
                 break;
             case STATISTIC_PERIOD_BY_WEEK:
-                columns = new String[]{CMyDBHelper.FIELD_WEEK, "SUM(" + CMyDBHelper.FIELD_PRICE + ")"};
+                columns = new String[]{CMyDBHelper.FIELD_WEEK, CMyDBHelper.FIELD_PRICE_SUM};
                 selection = CMyDBHelper.FIELD_TIME + " > " + beginTime + " AND " +
                         CMyDBHelper.FIELD_CATEGORY + " = " + catogery;
 
@@ -211,7 +211,7 @@ public class AccountBaseModel implements IBaseModel {
                 break;
             case STATISTIC_PERIOD_BY_MONTH:
             default:
-                columns = new String[]{CMyDBHelper.FIELD_MONTH, "SUM(" + CMyDBHelper.FIELD_PRICE + ")"};
+                columns = new String[]{CMyDBHelper.FIELD_MONTH, CMyDBHelper.FIELD_PRICE_SUM};
                 selection = CMyDBHelper.FIELD_TIME + " > " + beginTime + " AND " +
                         CMyDBHelper.FIELD_CATEGORY + " = " + catogery;
 
@@ -227,5 +227,13 @@ public class AccountBaseModel implements IBaseModel {
         }
         callback.onComplete();
 
+    }
+
+    public String getFieldNameCategory(){
+        return CMyDBHelper.FIELD_CATEGORY;
+    }
+
+    public String getFieldNameSumPrice(){
+        return CMyDBHelper.FIELD_PRICE_SUM;
     }
 }

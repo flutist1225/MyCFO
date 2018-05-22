@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.changda123.www.mycfo.BaseClass.BaseFragment;
 import com.changda123.www.mycfo.MainActivity;
 import com.changda123.www.mycfo.R;
+import com.changda123.www.mycfo.Util.MyLog;
 import com.changda123.www.mycfo.Util.RadioGroupEx;
 
 
@@ -85,8 +86,8 @@ public class AddRecordFragment extends BaseFragment implements IAddRecordView {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        mPresenter = new AddRecordPresenter();
+        MyLog.d(TAG, "AddRecordFragment.");
+        mPresenter = new AddRecordPresenter(getContext());
         mPresenter.attachView(this);
     }
 
