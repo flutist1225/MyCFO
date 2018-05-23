@@ -6,6 +6,7 @@
     tools:context=".Account.AddRecord.AddRecordFragment"
     android:orientation="vertical">
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -215,14 +216,13 @@
                     android:layout_height="wrap_content"
                     android:text="@string/column_time" />
 
-                <EditText
+                <TextView
                     android:id="@+id/idEditTextTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="10"
                     android:hint="@string/hint_time"
-                    android:inputType="time"
                     android:padding="8dp" />
+
             </LinearLayout>
 
             <LinearLayout

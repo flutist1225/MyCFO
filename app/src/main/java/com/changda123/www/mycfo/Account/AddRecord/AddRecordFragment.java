@@ -1,5 +1,6 @@
 package com.changda123.www.mycfo.Account.AddRecord;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -15,8 +17,12 @@ import android.widget.Toast;
 import com.changda123.www.mycfo.BaseClass.BaseFragment;
 import com.changda123.www.mycfo.MainActivity;
 import com.changda123.www.mycfo.R;
+import com.changda123.www.mycfo.Util.MyCommonApi;
 import com.changda123.www.mycfo.Util.MyLog;
 import com.changda123.www.mycfo.Util.RadioGroupEx;
+
+import java.util.Calendar;
+import java.util.Locale;
 
 
 /**
@@ -139,6 +145,14 @@ public class AddRecordFragment extends BaseFragment implements IAddRecordView {
         mTextWho   = (TextView) view.findViewById(R.id.idEditTextWho);
         mRadioGroupPayType = (RadioGroup) view.findViewById(R.id.idRadioGroupPayType);
 
+        initDateToNow();
+        mTextTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setDate(getContext());
+            }
+        });
+
         Button quickKeyButtonStopCar      = (Button) view.findViewById(R.id.idButtonStopCar);
         Button quickKeyButtonBuyVegetable = (Button) view.findViewById(R.id.idButtonBuyVegetable);
         Button quickKeyButtonEatSomething = (Button) view.findViewById(R.id.idButtonEatSomething);
@@ -190,7 +204,8 @@ public class AddRecordFragment extends BaseFragment implements IAddRecordView {
                 mRadioButtonCalegory = (RadioButton) view.findViewById(radioId);
                 Toast.makeText(getActivity(), "mRadioButtonCalegory.getText()：|" + mRadioButtonCalegory.getText() + "|", Toast.LENGTH_LONG).show();
 
-                java.util.Date date = new java.util.Date();
+
+                java.util.Date date = MyCommonApi.stringToDate(mTextTime.getText().toString(), "yyyy-MM-dd");
                 long datetime = date.getTime();
 
                 mRadioGroupPayType.getCheckedRadioButtonId();
@@ -222,6 +237,35 @@ public class AddRecordFragment extends BaseFragment implements IAddRecordView {
         });
     }
 
+    public void setDate(Context context) {
+        Calendar cal=Calendar.getInstance();
+        int year=cal.get(Calendar.YEAR);
+        int month=cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
+        int day=cal.get(Calendar.DAY_OF_MONTH);
+
+        new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+
+                showDate(year,monthOfYear+1, dayOfMonth);
+            }
+        }, year, month, day).show();
+
+    }
+
+    private void initDateToNow(){
+        Calendar cal=Calendar.getInstance();
+        int year=cal.get(Calendar.YEAR);
+        int month=cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
+        int day=cal.get(Calendar.DAY_OF_MONTH);
+
+        showDate(year, month+1, day);
+    }
+    private void showDate(int year, int month, int day){
+        mTextTime.setText(String.format(Locale.CHINA, "%d-%d-%d", year, month, day));
+    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -237,5 +281,6 @@ public class AddRecordFragment extends BaseFragment implements IAddRecordView {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 
 }

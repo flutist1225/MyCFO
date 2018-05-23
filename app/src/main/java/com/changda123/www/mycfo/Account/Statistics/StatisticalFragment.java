@@ -151,10 +151,11 @@ public class StatisticalFragment extends BaseFragment implements IStatisticsView
         queryButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                // 检查必选参数
+
                 int category = getCategory();
                 int period   = getPeriod();
                 Date beginDate = new Date(mYear-1900, mMonthOfYear, mDayOfMonth);
+
                 String categoryName = null;
                 if(category != CATEGORY_ALL) {
                     RadioButton categoryButton = mRootView.findViewById(mRadioGroupCategory.getCheckedRadioButtonId());
