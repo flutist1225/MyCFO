@@ -102,7 +102,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/statistic_period"/>
+                android:text="@string/statistic_period_text" />
 
             <com.changda123.www.mycfo.Util.RadioGroupEx
                 android:id="@+id/idStatisticPeriod"
@@ -166,19 +166,16 @@
             android:text="@string/button_query_do" />
 
         <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/bar_chart_total"
+            android:id="@+id/bar_chart"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="200dp"
+            android:visibility="invisible"/>
 
         <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/pie_chart_total"
+            android:id="@+id/pie_chart"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
-
-        <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/bar_chart_one"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="200dp"
+            android:visibility="invisible"/>
 
     </LinearLayout>
 

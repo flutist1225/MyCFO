@@ -51,8 +51,9 @@ public class AccountBaseModel  {
         long timeRange = currentTime - (long)days * 24*3600*1000;
         String selection = CMyDBHelper.FIELD_TIME + ">" + timeRange;
         MyLog.d(TAG, "MyCFO WorkThread selection:"+selection);
+        String orderBy = CMyDBHelper.FIELD_TIME +" DESC";
 
-        ArrayList<ContentValues> arrayContentList = mMyDBHelper.getListOfRecord(CMyDBHelper.TABLE_NAME_RECORD, columns, selection,null,null,null,null);
+        ArrayList<ContentValues> arrayContentList = mMyDBHelper.getListOfRecord(CMyDBHelper.TABLE_NAME_RECORD, columns, selection,null,null,null,orderBy);
 
         // Debug 代码
         for(int i=0; i<arrayContentList.size(); i++) {

@@ -41,6 +41,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import static android.view.View.VISIBLE;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -129,9 +131,8 @@ public class StatisticalFragment extends BaseFragment implements IStatisticsView
 
     @Override
     protected void initMembersView(Bundle savedInstanceState) {
-        mBarChart = (BarChart) mRootView.findViewById(R.id.bar_chart_total);
-        mPieChart = (PieChart) mRootView.findViewById(R.id.pie_chart_total);
-        BarChart barChartone   = (BarChart) mRootView.findViewById(R.id.bar_chart_one);
+        mBarChart = (BarChart) mRootView.findViewById(R.id.bar_chart);
+        mPieChart = (PieChart) mRootView.findViewById(R.id.pie_chart);
         Button changeDay = (Button) mRootView.findViewById(R.id.Sta_change_day);
         Button queryButton = (Button) mRootView.findViewById(R.id.Sta_button_query);
         mRadioGroupCategory = (RadioGroup) mRootView.findViewById(R.id.idStatisticCategory);
@@ -304,7 +305,7 @@ public class StatisticalFragment extends BaseFragment implements IStatisticsView
             yValues.add(node.getAsFloat(mPresenter.getFieldNameSumPrice()));
 
         }
-
+        mBarChart.setVisibility(VISIBLE);
         barChartManager1.showBarChart(xValues, yValues, getString(R.string.statistic_period_compare_all), Color.RED);
     }
 
