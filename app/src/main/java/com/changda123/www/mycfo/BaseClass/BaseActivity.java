@@ -36,7 +36,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
     @Override
-    public void showFailureMessage(String msg){showToast(getResources().getString(R.string.api_failure_msg));}
+    public void showFailureMessage(String msg){showToast(msg);}
 
     @Override
     public void showErr() {

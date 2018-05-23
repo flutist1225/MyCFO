@@ -35,16 +35,12 @@ public class StatisticsPresenter extends BasePresenter<IStatisticsView> implemen
         return mDataModel.getFieldNameSumPrice();
     }
 
-    public void querySubtotalGroupByCategory(int periodType, int periodValue){
-        mDataModel.querySubtotalGroupByCategory(periodType, periodValue, this);
+    public void querySubtotalForAllByCategory(int periodType, int periodValue){
+        mDataModel.querySubtotalForAllByCategory(periodType, periodValue, this);
     }
 
-    public void queryTotalGroupByPeriod(int periodType, long beginTime){
-        mDataModel.queryTotalGroupByPeriod(periodType, beginTime, this);
-    }
-
-    public void querySubtotalByCategory(String catogery, int periodType, long beginTime){
-        mDataModel.querySubtotalByCategory(catogery, periodType, beginTime, this);
+    public void querySubtotalByPeriod(String category, int periodType, long beginTime){
+        mDataModel.querySubtotalByPeriod(category, periodType, beginTime, this);
     }
 
     @Override

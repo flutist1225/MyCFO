@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,12 +16,154 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="sum:"/>
-            <TextView
-                android:id="@+id/statisticIdtext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:text="@string/column_category"/>
+
+            <com.changda123.www.mycfo.Util.RadioGroupEx
+                android:id="@+id/idStatisticCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/Sta_radio_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:checked="true"
+                    android:text="@string/const_all" />
+                <RadioButton
+                    android:id="@+id/Sta_radio_cloth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/category_name_cloth" />
+                <RadioButton
+                    android:id="@+id/Sta_radio_eat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/category_name_eat" />
+                <RadioButton
+                    android:id="@+id/Sta_radio_house"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/category_name_house" />
+                <RadioButton
+                    android:id="@+id/Sta_radio_run"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/category_name_run" />
+                <RadioButton
+                    android:id="@+id/Sta_radio_happy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/category_name_happy" />
+                <RadioButton
+                    android:id="@+id/Sta_radio_life"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/category_name_life" />
+                <RadioButton
+                    android:id="@+id/Sta_radio_education"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/category_name_education" />
+                <RadioButton
+                    android:id="@+id/Sta_radio_invest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/category_name_invest" />
+                <RadioButton
+                    android:id="@+id/Sta_radio_debt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/category_name_debt" />
+                <RadioButton
+                    android:id="@+id/Sta_radio_communication"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/category_name_communication" />
+
+            </com.changda123.www.mycfo.Util.RadioGroupEx>
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/statistic_period"/>
+
+            <com.changda123.www.mycfo.Util.RadioGroupEx
+                android:id="@+id/idStatisticPeriod"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/Sta_radio_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/statistic_by_year" />
+
+
+                <RadioButton
+                    android:id="@+id/Sta_radio_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:checked="true"
+                    android:text="@string/statistic_by_month" />
+
+
+                <RadioButton
+                    android:id="@+id/Sta_radio_week"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/statistic_by_week" />
+
+            </com.changda123.www.mycfo.Util.RadioGroupEx>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/statistic_begin_day"/>
+
+            <TextView
+                android:id="@+id/Sta_show_start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/Sta_change_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/statistic_change_day"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/Sta_button_query"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="@string/button_query_do" />
 
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/bar_chart_total"
@@ -39,4 +181,5 @@
             android:layout_height="match_parent" />
 
     </LinearLayout>
-</FrameLayout>
+
+</ScrollView>

@@ -1,17 +1,25 @@
 package com.changda123.www.mycfo.Account.Statistics;
 
+import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 
+import com.changda123.www.mycfo.Account.AccountBaseModel;
 import com.changda123.www.mycfo.BaseClass.BaseFragment;
 import com.changda123.www.mycfo.R;
 import com.changda123.www.mycfo.Util.BarChartManager;
+import com.changda123.www.mycfo.Util.MyLog;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
@@ -25,9 +33,12 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -40,10 +51,28 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class StatisticalFragment extends BaseFragment implements IStatisticsView {
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private static final String TAG = "StatisticalFragment";
+    private static final int CATEGORY_ALL = 0;
+    private static final int CATEGORY_CLOTH = 1;
+    private static final int CATEGORY_EAT = 2;
+    private static final int CATEGORY_HOUSE = 3;
+    private static final int CATEGORY_RUN = 4;
+    private static final int CATEGORY_HAPPY = 5;
+    private static final int CATEGORY_LIFE = 6;
+    private static final int CATEGORY_EDUCATION = 7;
+    private static final int CATEGORY_INVEST = 8;
+    private static final int CATEGORY_DEBT = 9;
+    private static final int CATEGORY_COMMUNICATION = 10;
+
+    private static final int PERIOD_YEAR  = AccountBaseModel.STATISTIC_PERIOD_BY_YEAR;
+    private static final int PERIOD_MONTH = AccountBaseModel.STATISTIC_PERIOD_BY_MONTH;
+    private static final int PERIOD_WEEK  = AccountBaseModel.STATISTIC_PERIOD_BY_WEEK;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -53,7 +82,12 @@ public class StatisticalFragment extends BaseFragment implements IStatisticsView
     private StatisticsPresenter mPresenter;
     private PieChart mPieChart;
     private BarChart mBarChart;
-
+    private TextView mShowDate;
+    private RadioGroup mRadioGroupCategory;
+    private RadioGroup mRadioGroupPeriod;
+    private int mYear = 2018;
+    private int mMonthOfYear = 0;
+    private int mDayOfMonth  = 1;
 
     public StatisticalFragment() {
         // Required empty public constructor
@@ -98,19 +132,130 @@ public class StatisticalFragment extends BaseFragment implements IStatisticsView
         mBarChart = (BarChart) mRootView.findViewById(R.id.bar_chart_total);
         mPieChart = (PieChart) mRootView.findViewById(R.id.pie_chart_total);
         BarChart barChartone   = (BarChart) mRootView.findViewById(R.id.bar_chart_one);
-        TextView sumValue      = (TextView) mRootView.findViewById(R.id.statisticIdtext);
+        Button changeDay = (Button) mRootView.findViewById(R.id.Sta_change_day);
+        Button queryButton = (Button) mRootView.findViewById(R.id.Sta_button_query);
+        mRadioGroupCategory = (RadioGroup) mRootView.findViewById(R.id.idStatisticCategory);
+        mRadioGroupPeriod = (RadioGroup) mRootView.findViewById(R.id.idStatisticPeriod);
+        mShowDate = (TextView) mRootView.findViewById(R.id.Sta_show_start_date);
 
 
-        //mPresenter.querySubtotalGroupByCategory(1, 2018);
-        Date beginDate = new Date(2018-1900, 1, 1);
-        mPresenter.queryTotalGroupByPeriod(3, beginDate.getTime());
+        showDate(2018,1,1);
+        changeDay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setDate(getContext());
+            }
+        });
+
+        queryButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                // 检查必选参数
+                int category = getCategory();
+                int period   = getPeriod();
+                Date beginDate = new Date(mYear-1900, mMonthOfYear, mDayOfMonth);
+                String categoryName = null;
+                if(category != CATEGORY_ALL) {
+                    RadioButton categoryButton = mRootView.findViewById(mRadioGroupCategory.getCheckedRadioButtonId());
+                    categoryName = categoryButton.getText().toString();
+                }
+
+                MyLog.d(TAG, "category:"+category + " period:"+period + " year:"+mYear);
+                mPresenter.querySubtotalByPeriod(categoryName, period, beginDate.getTime());
+
+            }
+        });
     }
 
+    // 点击事件,日期
+    public void setDate(Context context) {
+
+        new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                mYear = year;
+                mMonthOfYear = monthOfYear;
+                mDayOfMonth  = dayOfMonth;
+                showDate(year,monthOfYear+1, dayOfMonth);
+            }
+        }, mYear, mMonthOfYear, mDayOfMonth).show();
+
+    }
+
+    private void showDate(int year, int month, int day){
+        mShowDate.setText(String.format(Locale.CHINA, "%d-%d-%d", year, month, day));
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    private int getCategory(){
+        int radioId = mRadioGroupCategory.getCheckedRadioButtonId();
+        int category;
+        switch (radioId) {
+            case R.id.Sta_radio_all:
+                category = CATEGORY_ALL;
+                break;
+            case R.id.Sta_radio_cloth:
+                category = CATEGORY_CLOTH;
+                break;
+            case R.id.Sta_radio_eat:
+                category = CATEGORY_EAT;
+                break;
+            case R.id.Sta_radio_house:
+                category = CATEGORY_HOUSE;
+                break;
+            case R.id.Sta_radio_run:
+                category = CATEGORY_RUN;
+                break;
+            case R.id.Sta_radio_happy:
+                category = CATEGORY_HAPPY;
+                break;
+            case R.id.Sta_radio_life:
+                category = CATEGORY_LIFE;
+                break;
+            case R.id.Sta_radio_education:
+                category = CATEGORY_EDUCATION;
+                break;
+            case R.id.Sta_radio_invest:
+                category = CATEGORY_INVEST;
+                break;
+            case R.id.Sta_radio_debt:
+                category = CATEGORY_DEBT;
+                break;
+            case R.id.Sta_radio_communication:
+                category = CATEGORY_COMMUNICATION;
+                break;
+            default:
+                category = -1;
+                break;
+        }
+        return category;
+    }
+    private int getPeriod(){
+        int radioId = mRadioGroupPeriod.getCheckedRadioButtonId();
+        int value;
+        switch (radioId) {
+            case R.id.Sta_radio_year:
+                value = PERIOD_YEAR;
+                break;
+            case R.id.Sta_radio_month:
+                value = PERIOD_MONTH;
+                break;
+            case R.id.Sta_radio_week:
+                value = PERIOD_WEEK;
+                break;
+
+            default:
+                value = -1;
+                break;
+        }
+        return value;
     }
 
     @Override
@@ -137,18 +282,19 @@ public class StatisticalFragment extends BaseFragment implements IStatisticsView
     }
 
     private void showBarChart(List<ContentValues> data) {
-        int periodType = 3;
+
         BarChartManager barChartManager1 = new BarChartManager(mBarChart);
+        int periodType = getPeriod();
 
         //x轴的数据
         ArrayList<Float> xValues = new ArrayList<>();
         //y轴的数据()
         ArrayList<Float> yValues = new ArrayList<>();
         String xFieldName;
-        if(periodType == 3){
+        if(periodType == PERIOD_WEEK){
             xFieldName = mPresenter.getFieldNamePeriodWeek();
-        }else if(periodType == 1){
-            xFieldName = mPresenter.getFieldNamePeriodWeek();
+        }else if(periodType == PERIOD_YEAR){
+            xFieldName = mPresenter.getFieldNamePeriodYear();
         }else{
             xFieldName = mPresenter.getFieldNamePeriodMonth();
         }

@@ -58,11 +58,21 @@
     <string name="statistic_no_data">暂无数据</string>
     <string name="statistic_category_compare">分类占比图</string>
     <string name="statistic_period_compare">趋势图</string>
-    <string name="statistic_period_compare_all">总消费趋势图</string>
-
+    <string name="statistic_period_compare_all">消费趋势图</string>
+    <string name="statistic_period">周期</string>
+    <string name="statistic_by_year">按年</string>
+    <string name="statistic_by_month">按月</string>
+    <string name="statistic_by_week">按周</string>
+    <string name="statistic_begin_day">起始日期</string>
+    <string name="statistic_change_day">设置日期</string>
 
     <string name="const_string_10">10</string>
     <string name="const_string_me">我</string>
+    <string name="const_time_unit_year">年</string>
+    <string name="const_time_unit_month">月</string>
+    <string name="const_time_unit_week">周</string>
+    <string name="const_time_unit_day">日</string>
+    <string name="const_all">全部</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="api_error_msg">Error: there is a error when doing something!</string>

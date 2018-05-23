@@ -107,7 +107,7 @@ public class AccountBaseModel  {
      * @param periodType
      * @param periodValue
      */
-    public void querySubtotalGroupByCategory(int periodType, int periodValue, ICallbackOnModelFinished<List> callback) {
+    public void querySubtotalForAllByCategory(int periodType, int periodValue, ICallbackOnModelFinished<List> callback) {
 
         String[] columns = {CMyDBHelper.FIELD_CATEGORY, CMyDBHelper.FIELD_PRICE_SUM};
         String groupBy = CMyDBHelper.FIELD_CATEGORY;
@@ -134,60 +134,20 @@ public class AccountBaseModel  {
         if(arrayContentList.size() > 0){
             callback.onSuccess(arrayContentList);
         }else{
-            callback.onFailure("queryTotalGroupByPeriod in table "+CMyDBHelper.TABLE_NAME_RECORD + " return failed!");
+            callback.onFailure("querySubtotalForAllByCategory in table "+CMyDBHelper.TABLE_NAME_RECORD + " return failed!");
         }
         callback.onComplete();
     }
 
-    /**
-     * 查询在从beginTime开始的，每个年/月/周周期的总费用。 对比总费用的变化
-     * @param periodType
-     * @param beginTime
-     * @param callback
-     */
-    public void queryTotalGroupByPeriod(int periodType, long beginTime, ICallbackOnModelFinished<List> callback) {
-
-        String[] columns = null;
-        String selection = null;
-        String   groupBy = null;
-
-        switch (periodType) {
-            case STATISTIC_PERIOD_BY_YEAR:
-                columns   = new String[]{CMyDBHelper.FIELD_YEAR, CMyDBHelper.FIELD_PRICE_SUM};
-                selection = CMyDBHelper.FIELD_TIME + ">" + beginTime;
-                groupBy   = CMyDBHelper.FIELD_YEAR;
-                break;
-            case STATISTIC_PERIOD_BY_WEEK:
-                columns   = new String[]{CMyDBHelper.FIELD_WEEK, CMyDBHelper.FIELD_PRICE_SUM};
-                selection = CMyDBHelper.FIELD_TIME + ">" + beginTime;
-                groupBy   = CMyDBHelper.FIELD_WEEK;
-                break;
-            case STATISTIC_PERIOD_BY_MONTH:
-            default:
-                columns   = new String[]{CMyDBHelper.FIELD_MONTH, CMyDBHelper.FIELD_PRICE_SUM};
-                selection = CMyDBHelper.FIELD_TIME + ">" + beginTime;
-                groupBy   = CMyDBHelper.FIELD_MONTH;
-                break;
-        }
-
-        ArrayList<ContentValues> arrayContentList = mMyDBHelper.getListOfRecord(CMyDBHelper.TABLE_NAME_RECORD, columns, selection, null,groupBy,null,null);
-
-        if(arrayContentList.size() > 0){
-            callback.onSuccess(arrayContentList);
-        }else{
-            callback.onFailure("queryTotalGroupByPeriod in table "+CMyDBHelper.TABLE_NAME_RECORD + " return failed!");
-        }
-        callback.onComplete();
-    }
 
     /**
      * 某一类一定时间来的subtotal对比。 单类费用的变化
-     * @param catogery  事件类别（衣食住行等）
+     * @param category  事件类别（衣食住行等）
      * @param periodType 查询周期的类型，取值：年、月、周
      * @param beginTime 查询起始时间，单位：毫秒
      * @return 无返回值，回调通知Presenter
      */
-    public void querySubtotalByCategory(String catogery, int periodType, long beginTime, ICallbackOnModelFinished<List> callback) {
+    public void querySubtotalByPeriod(String category, int periodType, long beginTime, ICallbackOnModelFinished<List> callback) {
 
         String[] columns = null;
         String selection = null;
@@ -196,23 +156,28 @@ public class AccountBaseModel  {
         switch (periodType) {
             case STATISTIC_PERIOD_BY_YEAR:
                 columns = new String[]{CMyDBHelper.FIELD_YEAR, CMyDBHelper.FIELD_PRICE_SUM};
-                selection = CMyDBHelper.FIELD_TIME + " > " + beginTime + " AND " +
-                        CMyDBHelper.FIELD_CATEGORY + " = " + catogery;
-
+                selection = CMyDBHelper.FIELD_TIME + " > " + beginTime ;
+                if(category != null) {
+                    selection += " AND " + CMyDBHelper.FIELD_CATEGORY + " = '" + category + "'";
+                }
                 groupBy = CMyDBHelper.FIELD_YEAR;
                 break;
             case STATISTIC_PERIOD_BY_WEEK:
                 columns = new String[]{CMyDBHelper.FIELD_WEEK, CMyDBHelper.FIELD_PRICE_SUM};
-                selection = CMyDBHelper.FIELD_TIME + " > " + beginTime + " AND " +
-                        CMyDBHelper.FIELD_CATEGORY + " = " + catogery;
+                selection = CMyDBHelper.FIELD_TIME + " > " + beginTime ;
+                if(category != null) {
+                    selection += " AND " + CMyDBHelper.FIELD_CATEGORY + " = '" + category + "'";
+                }
 
                 groupBy = CMyDBHelper.FIELD_WEEK;
                 break;
             case STATISTIC_PERIOD_BY_MONTH:
             default:
                 columns = new String[]{CMyDBHelper.FIELD_MONTH, CMyDBHelper.FIELD_PRICE_SUM};
-                selection = CMyDBHelper.FIELD_TIME + " > " + beginTime + " AND " +
-                        CMyDBHelper.FIELD_CATEGORY + " = " + catogery;
+                selection = CMyDBHelper.FIELD_TIME + " > " + beginTime;
+                if(category != null) {
+                    selection += " AND " + CMyDBHelper.FIELD_CATEGORY + " = '" + category + "'";
+                }
 
                 groupBy = CMyDBHelper.FIELD_MONTH;
                 break;
@@ -222,7 +187,7 @@ public class AccountBaseModel  {
         if(arrayContentList.size() > 0){
             callback.onSuccess(arrayContentList);
         }else{
-            callback.onFailure("queryTotalGroupByPeriod in table "+CMyDBHelper.TABLE_NAME_RECORD + " return failed!");
+            callback.onFailure("querySubtotalByPeriod in table "+CMyDBHelper.TABLE_NAME_RECORD + " return failed!");
         }
         callback.onComplete();
 
