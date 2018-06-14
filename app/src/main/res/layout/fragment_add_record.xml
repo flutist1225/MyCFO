@@ -63,85 +63,18 @@
                 <TextView
                     android:id="@+id/column_category"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
                     android:text="@string/column_category"
                     tools:layout_editor_absoluteX="16dp"
                     tools:layout_editor_absoluteY="43dp" />
 
-                <com.changda123.www.mycfo.Util.RadioGroupEx
+                <com.changda123.www.mycfo.Util.CustomRadioGroup
                     android:id="@+id/idRadioGroupCalegory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/radioButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:text="@string/category_name_cloth" />
-
-                    <RadioButton
-                        android:id="@+id/radioButtonEat"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:checked="true"
-                        android:text="@string/category_name_eat" />
-
-                    <RadioButton
-                        android:id="@+id/radioButton3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:text="@string/category_name_house" />
-
-                    <RadioButton
-                        android:id="@+id/radioButtonRun"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:text="@string/category_name_run" />
-
-                    <RadioButton
-                        android:id="@+id/radioButton5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:text="@string/category_name_happy" />
-
-                    <RadioButton
-                        android:id="@+id/radioButton6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/category_name_life" />
-
-                    <RadioButton
-                        android:id="@+id/radioButton7"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/category_name_communication" />
-
-                    <RadioButton
-                        android:id="@+id/radioButton8"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/category_name_education" />
-
-                    <RadioButton
-                        android:id="@+id/radioButton9"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/category_name_invest" />
-
-                    <RadioButton
-                        android:id="@+id/radioButton10"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/category_name_debt" />
-                </com.changda123.www.mycfo.Util.RadioGroupEx>
+                    android:layout_marginTop="10dp"  />
             </LinearLayout>
 
             <LinearLayout

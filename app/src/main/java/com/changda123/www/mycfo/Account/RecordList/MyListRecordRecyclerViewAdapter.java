@@ -17,6 +17,9 @@ import java.util.List;
 
 public class MyListRecordRecyclerViewAdapter extends RecyclerView.Adapter<MyListRecordRecyclerViewAdapter.ViewHolder> {
 
+    private static final int NORMAL_ITEM = 0;
+    private static final int GROUP_ITEM = 1;
+
     private final List<ContentValues> mValues;
     private final OnListFragmentInteractionListener mListener;
 
@@ -29,6 +32,18 @@ public class MyListRecordRecyclerViewAdapter extends RecyclerView.Adapter<MyList
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_listrecord, parent, false);
+        /*
+        if (viewType == NORMAL_ITEM) {
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.bill_item_view_item, parent, false);
+            NormalItemHolder holder = new NormalItemHolder(mContext, itemView, listener, longClickListener);
+            return holder;
+        } else if (viewType == GROUP_ITEM) {
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.bill_item_view_list, parent, false);
+            GroupItemHolder holder = new GroupItemHolder(mContext, itemView, listener, longClickListener);
+            return holder;
+        }
+        return null;
+*/
         return new ViewHolder(view);
     }
 
@@ -44,7 +59,7 @@ public class MyListRecordRecyclerViewAdapter extends RecyclerView.Adapter<MyList
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
-        holder.mTimeView.setText(timeFormat.format(nowDate));
+        //holder.mTimeView.setText(timeFormat.format(nowDate));
         holder.mDateView.setText(dateFormat.format(nowDate));
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

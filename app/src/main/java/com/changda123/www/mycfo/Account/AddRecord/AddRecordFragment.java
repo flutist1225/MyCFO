@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.changda123.www.mycfo.BaseClass.BaseFragment;
 import com.changda123.www.mycfo.MainActivity;
 import com.changda123.www.mycfo.R;
+import com.changda123.www.mycfo.Util.CustomRadioGroup;
 import com.changda123.www.mycfo.Util.MyCommonApi;
 import com.changda123.www.mycfo.Util.MyLog;
 import com.changda123.www.mycfo.Util.RadioGroupEx;
@@ -43,7 +44,7 @@ public class AddRecordFragment extends BaseFragment implements IAddRecordView {
 
     AddRecordPresenter mPresenter;
 
-    private RadioGroupEx mRadioGroupCaletory;
+    private CustomRadioGroup mRadioGroupCaletory;
     private RadioButton mRadioButtonCalegory;
     private RadioGroup mRadioGroupPayType;
     private RadioButton mRadioButtonPayType;
@@ -60,6 +61,7 @@ public class AddRecordFragment extends BaseFragment implements IAddRecordView {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private String mCategoryText;
 
     private OnFragmentInteractionListener mListener;
 
@@ -136,8 +138,19 @@ public class AddRecordFragment extends BaseFragment implements IAddRecordView {
     @Override
     protected void initMembersView(Bundle savedInstanceState) {
         final View view = mRootView;
-        mRadioGroupCaletory = (RadioGroupEx) view.findViewById(R.id.idRadioGroupCalegory);
+        //TODO 待添加到数据库中
+        String[] strCaletory = { "衣","食","住","行","乐","命","通信","教育", "投资" };
 
+        mRadioGroupCaletory = (CustomRadioGroup) view.findViewById(R.id.idRadioGroupCalegory);
+        setSpacing(mRadioGroupCaletory,12,8);
+        mRadioGroupCaletory.setListener((text) -> {
+            mCategoryText = text;
+        });
+        for (int i = 0; i < strCaletory.length; i++) {
+            RadioButton radioButton = (RadioButton) this.getLayoutInflater().inflate(R.layout.radiobutton_addcart, null);
+            radioButton.setText(strCaletory[i]);
+            mRadioGroupCaletory.addView(radioButton);
+        }
         mTextEvent = (TextView) view.findViewById(R.id.idEditTextEvent);
         mTextPrice = (TextView) view.findViewById(R.id.idEditTextPrice);
         mTextTime  = (TextView) view.findViewById(R.id.idEditTextTime);
@@ -162,7 +175,13 @@ public class AddRecordFragment extends BaseFragment implements IAddRecordView {
             @Override
             public void onClick(View v) {
                 mTextEvent.setText(R.string.quickKey_stop_car);
-                mRadioGroupCaletory.check(R.id.radioButtonRun);
+                String strQuickKeyText = getString(R.string.category_name_run);
+                for(int i=0; i<mRadioGroupCaletory.getChildCount(); i++) {
+                    if(((RadioButton)mRadioGroupCaletory.getChildAt(i)).getText().equals(strQuickKeyText )) {
+                        mRadioGroupCaletory.check(i + 1);
+                        break;
+                    }
+                }
                 mTextPrice.setText(R.string.const_string_10);
             }
         });
@@ -170,21 +189,36 @@ public class AddRecordFragment extends BaseFragment implements IAddRecordView {
             @Override
             public void onClick(View v) {
                 mTextEvent.setText(R.string.quickKey_buy_vegetable);
-                mRadioGroupCaletory.check(R.id.radioButtonEat);
+                String strQuickKeyText = getString(R.string.category_name_eat);
+                for(int i=0; i<mRadioGroupCaletory.getChildCount(); i++) {
+                    if(((RadioButton)mRadioGroupCaletory.getChildAt(i)).getText().equals( strQuickKeyText)) {
+                        mRadioGroupCaletory.check(i+1);
+                    }
+                }
             }
         });
         quickKeyButtonEatSomething.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mTextEvent.setText(R.string.quickKey_eat_something);
-                mRadioGroupCaletory.check(R.id.radioButtonEat);
+                String strQuickKeyText = getString(R.string.category_name_eat);
+                for(int i=0; i<mRadioGroupCaletory.getChildCount(); i++) {
+                    if(((RadioButton)mRadioGroupCaletory.getChildAt(i)).getText().equals( strQuickKeyText)) {
+                        mRadioGroupCaletory.check(i+1);
+                    }
+                }
             }
         });
         quickKeyButtonRestuarant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mTextEvent.setText(R.string.quickKey_restaurant);
-                mRadioGroupCaletory.check(R.id.radioButtonEat);
+                String strQuickKeyText = getString(R.string.category_name_eat);
+                for(int i=0; i<mRadioGroupCaletory.getChildCount(); i++) {
+                    if(((RadioButton)mRadioGroupCaletory.getChildAt(i)).getText().equals( strQuickKeyText)) {
+                        mRadioGroupCaletory.check(i+1);
+                    }
+                }
             }
         });
 
@@ -282,5 +316,9 @@ public class AddRecordFragment extends BaseFragment implements IAddRecordView {
         void onFragmentInteraction(Uri uri);
     }
 
+    private void setSpacing(CustomRadioGroup cg,int widthdp,int heightdp){
+        cg.setHorizontalSpacing(widthdp);
+        cg.setVerticalSpacing(heightdp);
 
+    }
 }

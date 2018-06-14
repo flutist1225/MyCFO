@@ -151,4 +151,8 @@
     <color name="darkblue">#00008B</color> <!--暗蓝色 -->
     <color name="navy">#000080</color> <!--海军色 -->
     <color name="black">#000000</color> <!--黑色 -->
+
+    <color name="textcolor_content">#666666</color>
+    <color name="shop_main_color" >#ff2a31</color>
+    <color name="hint_color_line">#9ddd</color>
 </resources>

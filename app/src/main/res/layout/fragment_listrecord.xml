@@ -29,17 +29,6 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="1dp"
-            android:textSize="12sp"
-            android:textColor="@color/colorPrimaryDark"
-            android:background="@drawable/round_corners_rectangle"
-            android:textAppearance="?android:attr/textAppearanceListItem" />
-
-        <TextView
             android:id="@+id/event"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
