@@ -12,6 +12,7 @@
     <string name="column_location">地点 ：</string>
     <string name="column_person">为谁 ：</string>
     <string name="column_payType">付款方式 ：</string>
+    <string name="star">*</string>
 
     <string name="category_name_cloth">衣</string>
     <string name="category_name_eat">食</string>
@@ -73,6 +74,10 @@
     <string name="const_time_unit_week">周</string>
     <string name="const_time_unit_day">日</string>
     <string name="const_all">全部</string>
+
+    <string name="BackUp_DB">备份数据库</string>
+    <string name="Restore_DB">恢复数据库</string>
+    <string name="Restore_DBFromAsset">恢复数据库从Asset</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="api_error_msg">Error: there is a error when doing something!</string>

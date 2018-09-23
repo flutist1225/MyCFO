@@ -27,13 +27,11 @@ public class AccountBaseModel  {
     public void addRecord(String strCategory,
                           String strEvent,
                           String strPrice,
-                          String strLocation,
                           long lngTime,
                           String strWho,
-                          String strPayType,
                           ICallbackOnModelFinished<Long> callback) {
 
-        ContentValues data = mMyDBHelper.fillNewRecord(strCategory,strEvent,strPrice,strLocation,lngTime,strWho,strPayType);
+        ContentValues data = mMyDBHelper.fillNewRecord(strCategory,strEvent,strPrice,lngTime,strWho);
 
         long retId = mMyDBHelper.insertRecord(CMyDBHelper.TABLE_NAME_RECORD, data);
         if(retId > 0){
@@ -89,12 +87,10 @@ public class AccountBaseModel  {
                              String strCategory,
                              String strEvent,
                              String strPrice,
-                             String strLocation,
                              long lngTime,
                              String strWho,
-                             String strPayType,
                              ICallbackOnModelFinished<String> callback){
-        ContentValues data = mMyDBHelper.fillNewRecord(strCategory,strEvent,strPrice,strLocation,lngTime,strWho,strPayType);
+        ContentValues data = mMyDBHelper.fillNewRecord(strCategory,strEvent,strPrice,lngTime,strWho);
         long retId  = mMyDBHelper.updateRecord(CMyDBHelper.TABLE_NAME_RECORD, data, CMyDBHelper.FIELD_ID + " = " + "'" + id + "'", null);
         if(retId > 0){
             callback.onSuccess(null);

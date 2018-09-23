@@ -2,6 +2,7 @@ package com.changda123.www.mycfo;
 
 import android.content.ComponentName;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
@@ -47,7 +48,8 @@ public class MainActivity extends BaseActivity implements
 
                     return true;
                 case R.id.navigation_notifications:
-
+                    //Intent intent = new Intent(MainActivity.this, ConfManagerActivity.class);
+                    //startActivity(intent);
                     return true;
             }
             return false;
@@ -60,7 +62,7 @@ public class MainActivity extends BaseActivity implements
         setContentView(R.layout.activity_main);
 
         // 底部导航菜单View
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.getMenu();
 

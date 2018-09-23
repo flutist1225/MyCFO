@@ -17,16 +17,14 @@ public class AddRecordPresenter extends BasePresenter< IAddRecordView > implemen
     public void AddRecord(String strCategory,
                           String strEvent,
                           String strPrice,
-                          String strLocation,
                           long   lngTime,
-                          String strWho,
-                          String strPayType){
+                          String strWho){
 
         if (!isViewAttached()){
             //如果没有View引用就不加载数据
             return;
         }
-        mDataModel.addRecord(strCategory,strEvent,strPrice,strLocation,lngTime,strWho,strPayType, this);
+        mDataModel.addRecord(strCategory,strEvent,strPrice,lngTime,strWho, this);
     }
 
     @Override

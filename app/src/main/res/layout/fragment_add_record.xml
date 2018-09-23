@@ -8,10 +8,13 @@
 
 
         <LinearLayout
+            android:id="@+id/idAddRecord"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
             android:orientation="vertical">
 
+            <!-- View 1 快捷键 -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -55,6 +58,7 @@
                     tools:ignore="ButtonStyle" />
             </LinearLayout>
 
+            <!-- View 2 类别 -->
             <LinearLayout
                 android:id="@+id/accountIdCategory"
                 android:layout_width="wrap_content"
@@ -64,19 +68,38 @@
                     android:id="@+id/column_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawablePadding="10dp"
-                    android:gravity="center_vertical"
                     android:text="@string/column_category"
-                    tools:layout_editor_absoluteX="16dp"
-                    tools:layout_editor_absoluteY="43dp" />
+                    android:layout_gravity="center_vertical"/>
 
                 <com.changda123.www.mycfo.Util.CustomRadioGroup
                     android:id="@+id/idRadioGroupCalegory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"  />
+                    android:layout_marginTop="10dp" />
             </LinearLayout>
 
+            <!-- View 3 金额 -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/column_price" />
+
+                <EditText
+                    android:id="@+id/idEditTextPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/hint_price"
+                    android:inputType="numberDecimal"
+                    android:padding="8dp" />
+            </LinearLayout>
+
+            <!-- View 4 事件 -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -98,47 +121,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/column_price" />
-
-                <EditText
-                    android:id="@+id/idEditTextPrice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="@string/hint_price"
-                    android:inputType="numberDecimal"
-                    android:padding="8dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/column_location" />
-
-                <EditText
-                    android:id="@+id/idEditTextLocation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="@string/hint_position"
-                    android:inputType="textPersonName"
-                    android:padding="8dp" />
-
-            </LinearLayout>
-
+            <!-- View 5 时间 -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -158,81 +141,9 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <!-- View 6 为谁 -->
 
-                <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/column_person" />
-
-                <EditText
-                    android:id="@+id/idEditTextWho"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="@string/hint_who"
-                    android:inputType="textPersonName"
-                    android:padding="8dp"
-                    android:text="@string/const_string_me" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/textView7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/column_payType" />
-
-                <RadioGroup
-                    android:id="@+id/idRadioGroupPayType"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <RadioButton
-                        android:id="@+id/radioButton11"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:checked="true"
-                        android:text="@string/payType_cash" />
-
-                    <RadioButton
-                        android:id="@+id/radioButton12"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:text="@string/payType_zhifubao" />
-
-                    <RadioButton
-                        android:id="@+id/radioButton13"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:text="@string/payType_weixin" />
-
-                    <RadioButton
-                        android:id="@+id/radioButton14"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:text="@string/payType_card" />
-
-                    <RadioButton
-                        android:id="@+id/radioButton15"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:text="@string/payType_creditCard" />
-
-                </RadioGroup>
-            </LinearLayout>
-
+            <!-- View 7 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -256,6 +167,8 @@
 
             </LinearLayout>
 
+            <!-- View 8 -->
+            <include layout="@layout/button_with_background" />
 
         </LinearLayout>
 

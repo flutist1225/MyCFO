@@ -5,23 +5,27 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.changda123.www.mycfo.BaseClass.BaseFragment;
-import com.changda123.www.mycfo.MainActivity;
 import com.changda123.www.mycfo.R;
 import com.changda123.www.mycfo.Util.CustomRadioGroup;
 import com.changda123.www.mycfo.Util.MyCommonApi;
 import com.changda123.www.mycfo.Util.MyLog;
-import com.changda123.www.mycfo.Util.RadioGroupEx;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -44,16 +48,18 @@ public class AddRecordFragment extends BaseFragment implements IAddRecordView {
 
     AddRecordPresenter mPresenter;
 
+    private boolean isHavePayType = false;
+    private boolean isHaveWho = false;
+    private boolean isHaveWhere = false;
+
     private CustomRadioGroup mRadioGroupCaletory;
     private RadioButton mRadioButtonCalegory;
     private RadioGroup mRadioGroupPayType;
-    private RadioButton mRadioButtonPayType;
     private TextView mTextEvent;
-    private TextView mTextPrice;
+    private EditText mTextPrice;
     private TextView mTextLocation;
     private TextView mTextTime;
     private TextView mTextWho;
-    private TextView mPayType;
     private Button mButtonAdd;
 
     private String mQuickKeyString;
@@ -152,17 +158,27 @@ public class AddRecordFragment extends BaseFragment implements IAddRecordView {
             mRadioGroupCaletory.addView(radioButton);
         }
         mTextEvent = (TextView) view.findViewById(R.id.idEditTextEvent);
-        mTextPrice = (TextView) view.findViewById(R.id.idEditTextPrice);
+        mTextPrice = (EditText) view.findViewById(R.id.idEditTextPrice);
+
         mTextTime  = (TextView) view.findViewById(R.id.idEditTextTime);
-        mTextLocation = (TextView) view.findViewById(R.id.idEditTextLocation);
         mTextWho   = (TextView) view.findViewById(R.id.idEditTextWho);
-        mRadioGroupPayType = (RadioGroup) view.findViewById(R.id.idRadioGroupPayType);
 
         initDateToNow();
-        mTextTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setDate(getContext());
+        mTextTime.setOnClickListener(v -> setDate(getContext()));
+
+
+        TextView showWho = view.findViewById(R.id.idButtonAddWho);
+        showWho.setOnClickListener(v -> {
+            LinearLayout dd = mRootView.findViewById(R.id.idAddRecord);
+            LinearLayout payView = (LinearLayout) getLayoutInflater().inflate(R.layout.add_record_who, null);
+            String payWhoTag = "who";
+            payView.setTag(payWhoTag);
+            if(!isHaveWho) {
+                isHaveWho = true;
+                dd.addView(payView, dd.getChildCount()-2);
+            }else{
+                isHaveWho = false;
+                dd.removeView(dd.findViewWithTag(payWhoTag));
             }
         });
 
@@ -235,28 +251,27 @@ public class AddRecordFragment extends BaseFragment implements IAddRecordView {
                 }
 
                 // 获取参数值
-                mRadioButtonCalegory = (RadioButton) view.findViewById(radioId);
+                MyLog.d(TAG, "RaidoButton ID: "+ radioId);
+                mRadioButtonCalegory = (RadioButton) mRadioGroupCaletory.findViewById(radioId);
+                if(mRadioButtonCalegory == null){
+                    MyLog.d(TAG, "mRadioGroupCaletory is NULL!!");
+                }
                 Toast.makeText(getActivity(), "mRadioButtonCalegory.getText()：|" + mRadioButtonCalegory.getText() + "|", Toast.LENGTH_LONG).show();
 
 
                 java.util.Date date = MyCommonApi.stringToDate(mTextTime.getText().toString(), "yyyy-MM-dd");
                 long datetime = date.getTime();
 
-                mRadioGroupPayType.getCheckedRadioButtonId();
-                String payType = null;
-                if(-1 != mRadioGroupPayType.getCheckedRadioButtonId()) {
-                    mRadioButtonCalegory = (RadioButton) view.findViewById(radioId);
-                    payType = mRadioButtonCalegory.getText().toString();
-                }
 
                 // Add new record
+                String location = (null != mTextLocation)?mTextLocation.getText().toString():null;
+                String who = (null != mTextWho)?mTextWho.getText().toString():"";
+
                 mPresenter.AddRecord(mRadioButtonCalegory.getText().toString(),
                         mTextEvent.getText().toString(),
                         mTextPrice.getText().toString(),
-                        mTextLocation.getText().toString(),
                         datetime,
-                        mTextWho.getText().toString(),
-                        payType);
+                        who  );
                 /*
                 ((MainActivity)getActivity()).addNewRecord(
                         mRadioButtonCalegory.getText().toString(),

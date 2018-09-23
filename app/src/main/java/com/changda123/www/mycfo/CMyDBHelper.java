@@ -2,14 +2,28 @@ package com.changda123.www.mycfo;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 
 import com.changda123.www.mycfo.Util.MyLog;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,6 +38,9 @@ public class CMyDBHelper extends SQLiteOpenHelper{
 
     //数据库名称
     private static final String DATABASE_NAME = "MyCFO.db";
+    private static final String DATABASE_NAME_BACKUP = "MyCFO_hw.db";
+    private static final String DATABASE_RECORD_BACKUP_FILE = "MyCFO_Records.ini";
+
     //表名+字段
     public static final String TABLE_NAME_RECORD = "records";// records表
     public static final String FIELD_ID = "id";
@@ -31,11 +48,9 @@ public class CMyDBHelper extends SQLiteOpenHelper{
     public static final String FIELD_EVENT = "event";
     public static final String FIELD_PRICE = "price";
     public static final String FIELD_PRICE_SUM = "SUM(price)";
-    public static final String FIELD_LOCATION = "location";
     public static final String FIELD_TIME ="time";
     public static final String FIELD_DISPLAY_TIME ="display_time";
     public static final String FIELD_WHO = "who";
-    public static final String FIELD_PAY_TYPE = "pay_type";
     public static final String FIELD_YEAR  = "year";
     public static final String FIELD_MONTH = "month";
     public static final String FIELD_WEEK  = "week";
@@ -48,13 +63,12 @@ public class CMyDBHelper extends SQLiteOpenHelper{
     public static final String TABLE_NAME_PERSON = "person";// person表
     public static final String FIELD_PEOPLE_NAME = "who";
 
-    public static final String TABLE_NAME_PAY = "pay";// pay表
-    public static final String FIELD_NAME_PAY_TYPE = "name";
     //自定义类别和Person的最大字符数
     private static final int MAX_CHAR_NUMBER = 10;
     // 静态引用
     private volatile static CMyDBHelper mInstance;
     private SQLiteDatabase mDBWriteHandler;
+    Context mContext;
 
     private CMyDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -68,6 +82,7 @@ public class CMyDBHelper extends SQLiteOpenHelper{
                 if (inst == null) {
                     inst = new CMyDBHelper(context);
                     mInstance = inst;
+                    mInstance.mContext = context;
                 }
             }
         }
@@ -80,7 +95,6 @@ public class CMyDBHelper extends SQLiteOpenHelper{
         createRecordsTable(db);
         createCategoryTable(db);
         createPeopleTable(db);
-        createPayTypeTable(db);
 
         // 若不是第一个版本安装，直接执行数据库升级
         // !!请不要修改FIRST_DATABASE_VERSION的值，其为第一个数据库版本大小
@@ -152,9 +166,7 @@ public class CMyDBHelper extends SQLiteOpenHelper{
                 FIELD_PRICE + " int, " +
                 FIELD_TIME + " int, " +
                 FIELD_DISPLAY_TIME + " nvarchar(50) not null, " +
-                FIELD_WHO + " nvarchar(" + MAX_CHAR_NUMBER + ")," +
-                FIELD_LOCATION + " nvarchar(50), " +
-                FIELD_PAY_TYPE + " nvarchar(" + MAX_CHAR_NUMBER + ") " +
+                FIELD_WHO + " nvarchar(" + MAX_CHAR_NUMBER + ")" +
                 ");";
 
         MyLog.d(TAG, "createRecordsTable execSQL: " + sql);
@@ -207,28 +219,6 @@ public class CMyDBHelper extends SQLiteOpenHelper{
             return true;
         } catch (SQLException e) {
             MyLog.e(TAG, "onCreate " + TABLE_NAME_PERSON + "Error" + e.toString());
-        }
-
-        return false;
-    }
-
-    /**
-     * 用户付款方式表
-     * @param db 数据库
-     * @return
-     */
-    private synchronized boolean createPayTypeTable(SQLiteDatabase db){
-        // 创建人物表
-        String  sql = "CREATE TABLE " + TABLE_NAME_PAY +
-                "(" +
-                FIELD_NAME_PAY_TYPE + " nvarchar(" + MAX_CHAR_NUMBER + ")  " +
-                ");";
-        MyLog.d(TAG, "createPayTypeTable execSQL: " + sql);
-        try {
-            db.execSQL(sql);
-            return true;
-        } catch (SQLException e) {
-            MyLog.e(TAG, "onCreate " + TABLE_NAME_PAY + "Error" + e.toString());
         }
 
         return false;
@@ -354,21 +344,17 @@ public class CMyDBHelper extends SQLiteOpenHelper{
     public ContentValues fillNewRecord(String strCategory,
                                        String strEvent,
                                        String strPrice,
-                                       String strLocation,
                                        long lngTime,
-                                       String strWho,
-                                       String strPayType){
+                                       String strWho){
 
         ContentValues values = new ContentValues();
         // ContentValues Key只能是String类型，Value只能存储基本类型数据，不能存储对象
         values.put(CMyDBHelper.FIELD_CATEGORY, strCategory);
         values.put(CMyDBHelper.FIELD_EVENT, strEvent);
         values.put(CMyDBHelper.FIELD_PRICE, CMyDBHelper.convertPriceToInt(strPrice));
-        values.put(CMyDBHelper.FIELD_LOCATION, strLocation);
         values.put(CMyDBHelper.FIELD_TIME, lngTime);
         values.put(CMyDBHelper.FIELD_DISPLAY_TIME, CMyDBHelper.dateToString(new Date(lngTime)));
         values.put(CMyDBHelper.FIELD_WHO, strWho);
-        values.put(CMyDBHelper.FIELD_PAY_TYPE, strPayType);
 
         Date date = new Date(lngTime);
         Calendar cal = Calendar.getInstance();
@@ -379,5 +365,136 @@ public class CMyDBHelper extends SQLiteOpenHelper{
 
         return values;
     }
+
+    boolean IsBackupDatabaseExist(){
+        File file = new File(Environment.getExternalStorageDirectory(), DATABASE_RECORD_BACKUP_FILE );
+        return file.exists();
+    }
+    boolean BackupRecordToFile(){
+        File file = new File(Environment.getExternalStorageDirectory(), DATABASE_RECORD_BACKUP_FILE);
+        if (!file.exists()) {
+            try {
+                if (!file.createNewFile()) {
+                    MyLog.e(TAG, "===yangyu=== Create Record backup file failed!!");
+                    return false;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        JSONArray allDataArray = new JSONArray();
+        String[] columns = { CMyDBHelper.FIELD_EVENT, CMyDBHelper.FIELD_PRICE, CMyDBHelper.FIELD_CATEGORY, CMyDBHelper.FIELD_TIME,  CMyDBHelper.FIELD_WHO };
+        ArrayList<ContentValues> arrayContentList = getListOfRecord(CMyDBHelper.TABLE_NAME_RECORD,columns, null, null,null,null,CMyDBHelper.FIELD_ID);
+
+        // Debug 代码
+        for(int i=0; i<arrayContentList.size(); i++) {
+            JSONObject oneRecordObject = new JSONObject();
+            try {
+                oneRecordObject.put(CMyDBHelper.FIELD_EVENT, arrayContentList.get(i).getAsString(CMyDBHelper.FIELD_EVENT));
+                oneRecordObject.put(CMyDBHelper.FIELD_PRICE, arrayContentList.get(i).getAsString(CMyDBHelper.FIELD_PRICE));
+                oneRecordObject.put(CMyDBHelper.FIELD_CATEGORY, arrayContentList.get(i).getAsString(CMyDBHelper.FIELD_CATEGORY));
+                oneRecordObject.put(CMyDBHelper.FIELD_TIME, arrayContentList.get(i).getAsLong(CMyDBHelper.FIELD_TIME));
+                oneRecordObject.put(CMyDBHelper.FIELD_WHO, arrayContentList.get(i).getAsString(CMyDBHelper.FIELD_WHO));
+                allDataArray.put(oneRecordObject);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        MyLog.e(TAG, "===yangyu=== Begin Backup Records to external path:"+Environment.getExternalStorageDirectory() + DATABASE_RECORD_BACKUP_FILE);
+        try {
+            FileOutputStream outputFileStream = new FileOutputStream(file);
+            outputFileStream.write(allDataArray.toString().getBytes());
+            outputFileStream.flush();
+            outputFileStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    void RestoreDBfromFile(Context context){
+        try {
+            // 得到 assets 目录下我们实现准备好的 SQLite 数据库作为输入流
+            File file =new File(Environment.getExternalStorageDirectory(), DATABASE_RECORD_BACKUP_FILE);
+            if (!file.exists()) {
+                return;
+            }
+
+            InputStream fileInputStream = new FileInputStream(file);
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, "UTF-8");
+            BufferedReader reader = new BufferedReader(inputStreamReader);
+            String laststr = "";
+            String tempString = null;
+            while((tempString = reader.readLine()) != null){
+                laststr += tempString;
+            }
+            reader.close();
+            fileInputStream.close();
+            MyLog.d(TAG, "===yangyu=== Begin Restore Records from string:"+laststr);
+
+            JSONArray allData = new JSONArray(laststr);
+            for(int i=0; i<allData.length(); i++){
+                JSONObject jsonObject = new JSONObject(allData.get(i).toString());
+
+                ContentValues data = fillNewRecord(jsonObject.getString(CMyDBHelper.FIELD_CATEGORY),
+                        jsonObject.getString(CMyDBHelper.FIELD_EVENT),
+                        jsonObject.getString(CMyDBHelper.FIELD_PRICE),
+                        jsonObject.getLong(CMyDBHelper.FIELD_TIME),
+                        jsonObject.getString(CMyDBHelper.FIELD_WHO));
+                long retId = insertRecord(CMyDBHelper.TABLE_NAME_RECORD, data);
+                if(retId > 0){
+                    MyLog.d(TAG, "===yangyu=== Add Record ok: "+ jsonObject.getString(CMyDBHelper.FIELD_EVENT));
+                }else{
+                    MyLog.e(TAG, "===yangyu=== add failed! :" + jsonObject.getString(CMyDBHelper.FIELD_EVENT));
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean RestoreRecordsFromAssetDB(Context context)
+    {
+        File jhPath = context.getDatabasePath(DATABASE_NAME);
+        if(!jhPath.exists()){
+            MyLog.i(TAG, "[==yangyu==] Default DB not exist! :"+ context.getDatabasePath(DATABASE_NAME));
+            return false;
+        }
+
+        try {
+            //得到资源
+            AssetManager am = context.getAssets();
+            //得到数据库的输入流
+            InputStream is=am.open(DATABASE_NAME_BACKUP);
+
+            //用输出流写到SDcard上面
+            FileOutputStream fos = new FileOutputStream(jhPath);
+
+            //创建byte数组  用于1KB写一次
+            byte[] buffer = new byte[1024];
+            int count = 0;
+            while((count = is.read(buffer))>0){
+                MyLog.i(TAG, "得到");
+                fos.write(buffer,0,count);
+            }
+            //最后关闭就可以了
+            fos.flush();
+            fos.close();
+            is.close();
+            return true;
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
 
 }
