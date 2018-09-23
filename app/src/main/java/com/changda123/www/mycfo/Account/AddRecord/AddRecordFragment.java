@@ -48,25 +48,16 @@ public class AddRecordFragment extends BaseFragment implements IAddRecordView {
 
     AddRecordPresenter mPresenter;
 
-    private boolean isHavePayType = false;
     private boolean isHaveWho = false;
-    private boolean isHaveWhere = false;
 
     private CustomRadioGroup mRadioGroupCaletory;
-    private RadioButton mRadioButtonCalegory;
-    private RadioGroup mRadioGroupPayType;
+    private RadioButton mCalegoryRadioButton;
     private TextView mTextEvent;
     private EditText mTextPrice;
-    private TextView mTextLocation;
     private TextView mTextTime;
     private TextView mTextWho;
     private Button mButtonAdd;
 
-    private String mQuickKeyString;
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private String mCategoryText;
 
     private OnFragmentInteractionListener mListener;
@@ -96,10 +87,6 @@ public class AddRecordFragment extends BaseFragment implements IAddRecordView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
         MyLog.d(TAG, "AddRecordFragment.");
         mPresenter = new AddRecordPresenter(getContext());
         mPresenter.attachView(this);
@@ -159,7 +146,6 @@ public class AddRecordFragment extends BaseFragment implements IAddRecordView {
         }
         mTextEvent = (TextView) view.findViewById(R.id.idEditTextEvent);
         mTextPrice = (EditText) view.findViewById(R.id.idEditTextPrice);
-
         mTextTime  = (TextView) view.findViewById(R.id.idEditTextTime);
         mTextWho   = (TextView) view.findViewById(R.id.idEditTextWho);
 
@@ -192,13 +178,15 @@ public class AddRecordFragment extends BaseFragment implements IAddRecordView {
             public void onClick(View v) {
                 mTextEvent.setText(R.string.quickKey_stop_car);
                 String strQuickKeyText = getString(R.string.category_name_run);
+                MyLog.d(TAG, "quickKeyButton num:"+mRadioGroupCaletory.getChildCount()+ " strQuickKeyText:"+strQuickKeyText);
                 for(int i=0; i<mRadioGroupCaletory.getChildCount(); i++) {
                     if(((RadioButton)mRadioGroupCaletory.getChildAt(i)).getText().equals(strQuickKeyText )) {
-                        mRadioGroupCaletory.check(i + 1);
+                        mRadioGroupCaletory.check(mRadioGroupCaletory.getChildAt(i).getId());
+                        MyLog.d(TAG, "child i:"+i+" text:"+((RadioButton)mRadioGroupCaletory.getChildAt(i)).getText());
                         break;
                     }
                 }
-                mTextPrice.setText(R.string.const_string_10);
+                mTextPrice.setText(R.string.const_string_5);
             }
         });
         quickKeyButtonBuyVegetable.setOnClickListener(new View.OnClickListener() {
@@ -208,7 +196,7 @@ public class AddRecordFragment extends BaseFragment implements IAddRecordView {
                 String strQuickKeyText = getString(R.string.category_name_eat);
                 for(int i=0; i<mRadioGroupCaletory.getChildCount(); i++) {
                     if(((RadioButton)mRadioGroupCaletory.getChildAt(i)).getText().equals( strQuickKeyText)) {
-                        mRadioGroupCaletory.check(i+1);
+                        mRadioGroupCaletory.check(mRadioGroupCaletory.getChildAt(i).getId());
                     }
                 }
             }
@@ -220,7 +208,7 @@ public class AddRecordFragment extends BaseFragment implements IAddRecordView {
                 String strQuickKeyText = getString(R.string.category_name_eat);
                 for(int i=0; i<mRadioGroupCaletory.getChildCount(); i++) {
                     if(((RadioButton)mRadioGroupCaletory.getChildAt(i)).getText().equals( strQuickKeyText)) {
-                        mRadioGroupCaletory.check(i+1);
+                        mRadioGroupCaletory.check(mRadioGroupCaletory.getChildAt(i).getId());
                     }
                 }
             }
@@ -232,7 +220,7 @@ public class AddRecordFragment extends BaseFragment implements IAddRecordView {
                 String strQuickKeyText = getString(R.string.category_name_eat);
                 for(int i=0; i<mRadioGroupCaletory.getChildCount(); i++) {
                     if(((RadioButton)mRadioGroupCaletory.getChildAt(i)).getText().equals( strQuickKeyText)) {
-                        mRadioGroupCaletory.check(i+1);
+                        mRadioGroupCaletory.check(mRadioGroupCaletory.getChildAt(i).getId());
                     }
                 }
             }
@@ -252,36 +240,24 @@ public class AddRecordFragment extends BaseFragment implements IAddRecordView {
 
                 // 获取参数值
                 MyLog.d(TAG, "RaidoButton ID: "+ radioId);
-                mRadioButtonCalegory = (RadioButton) mRadioGroupCaletory.findViewById(radioId);
-                if(mRadioButtonCalegory == null){
-                    MyLog.d(TAG, "mRadioGroupCaletory is NULL!!");
+                mCalegoryRadioButton = (RadioButton) mRadioGroupCaletory.getChildAt(radioId);
+                if(mCalegoryRadioButton == null){
+                    MyLog.d(TAG, "mRadioGroupCaletory is NULL!!, id:"+radioId);
                 }
-                Toast.makeText(getActivity(), "mRadioButtonCalegory.getText()：|" + mRadioButtonCalegory.getText() + "|", Toast.LENGTH_LONG).show();
-
+                Toast.makeText(getActivity(), "Add new record success. " + mCalegoryRadioButton.getText() + "|", Toast.LENGTH_LONG).show();
 
                 java.util.Date date = MyCommonApi.stringToDate(mTextTime.getText().toString(), "yyyy-MM-dd");
                 long datetime = date.getTime();
 
-
                 // Add new record
-                String location = (null != mTextLocation)?mTextLocation.getText().toString():null;
                 String who = (null != mTextWho)?mTextWho.getText().toString():"";
 
-                mPresenter.AddRecord(mRadioButtonCalegory.getText().toString(),
+                mPresenter.AddRecord(mCalegoryRadioButton.getText().toString(),
                         mTextEvent.getText().toString(),
                         mTextPrice.getText().toString(),
                         datetime,
                         who  );
-                /*
-                ((MainActivity)getActivity()).addNewRecord(
-                        mRadioButtonCalegory.getText().toString(),
-                        mTextEvent.getText().toString(),
-                        mTextPrice.getText().toString(),
-                        mTextLocation.getText().toString(),
-                        datetime,
-                        mTextWho.getText().toString(),
-                        payType);
-                */
+
             }
         });
     }
