@@ -53,6 +53,7 @@ public class MyListRecordRecyclerViewAdapter extends RecyclerView.Adapter<MyList
         holder.mIdView.setText(mValues.get(position).getAsString(CMyDBHelper.FIELD_ID));
         holder.mContentView.setText(mValues.get(position).getAsString(CMyDBHelper.FIELD_EVENT));
         holder.mPriceView.setText(mValues.get(position).getAsString(CMyDBHelper.FIELD_PRICE));
+        holder.mCategory.setText("[" + mValues.get(position).getAsString(CMyDBHelper.FIELD_CATEGORY)+ "]");
 
         Date nowDate = new Date(mValues.get(position).getAsLong(CMyDBHelper.FIELD_TIME));
 
@@ -85,6 +86,7 @@ public class MyListRecordRecyclerViewAdapter extends RecyclerView.Adapter<MyList
         public final TextView mDateView;
         public final TextView mTimeView;
         public final TextView mPriceView;
+        public final TextView mCategory;
 
         public ContentValues mItem;
 
@@ -96,6 +98,7 @@ public class MyListRecordRecyclerViewAdapter extends RecyclerView.Adapter<MyList
             mTimeView = (TextView) view.findViewById(R.id.time);
             mPriceView = (TextView) view.findViewById(R.id.price);
             mDateView  = (TextView) view.findViewById(R.id.date);
+            mCategory  = view.findViewById(R.id.category);
         }
 
         @Override
