@@ -227,6 +227,7 @@ public class AddRecordFragment extends BaseFragment implements IAddRecordView {
         });
 
         mButtonAdd = (Button) view.findViewById(R.id.idButtonAdd);
+
         mButtonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -240,9 +241,11 @@ public class AddRecordFragment extends BaseFragment implements IAddRecordView {
 
                 // 获取参数值
                 MyLog.d(TAG, "RaidoButton ID: "+ radioId);
-                mCalegoryRadioButton = (RadioButton) mRadioGroupCaletory.getChildAt(radioId);
+                mCalegoryRadioButton = mRootView.findViewById(radioId);
                 if(mCalegoryRadioButton == null){
                     MyLog.d(TAG, "mRadioGroupCaletory is NULL!!, id:"+radioId);
+                    Toast.makeText(getActivity(), "Add new record Failed! ", Toast.LENGTH_LONG).show();
+                    return;
                 }
                 Toast.makeText(getActivity(), "Add new record success. " + mCalegoryRadioButton.getText() + "|", Toast.LENGTH_LONG).show();
 
