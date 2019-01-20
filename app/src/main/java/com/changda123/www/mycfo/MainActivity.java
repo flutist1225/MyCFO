@@ -48,8 +48,8 @@ public class MainActivity extends BaseActivity implements
 
                     return true;
                 case R.id.navigation_notifications:
-                    //Intent intent = new Intent(MainActivity.this, ConfManagerActivity.class);
-                    //startActivity(intent);
+                    Intent intent = new Intent(MainActivity.this, ConfManagerActivity.class);
+                    startActivity(intent);
                     return true;
             }
             return false;

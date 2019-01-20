@@ -1,5 +1,6 @@
 package com.changda123.www.mycfo;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -8,6 +9,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
+import android.widget.Toast;
 
 import com.changda123.www.mycfo.Util.MyLog;
 
@@ -370,12 +372,14 @@ public class CMyDBHelper extends SQLiteOpenHelper{
         File file = new File(Environment.getExternalStorageDirectory(), DATABASE_RECORD_BACKUP_FILE );
         return file.exists();
     }
-    boolean BackupRecordToFile(){
+    boolean BackupRecordToFile(Context context){
         File file = new File(Environment.getExternalStorageDirectory(), DATABASE_RECORD_BACKUP_FILE);
         if (!file.exists()) {
+            Toast.makeText(context, "File:"+ Environment.getExternalStorageDirectory()+" Not existed!", Toast.LENGTH_LONG).show();
             try {
                 if (!file.createNewFile()) {
                     MyLog.e(TAG, "===yangyu=== Create Record backup file failed!!");
+                    Toast.makeText(context, "Create File failed!", Toast.LENGTH_LONG).show();
                     return false;
                 }
             } catch (IOException e) {
@@ -387,6 +391,7 @@ public class CMyDBHelper extends SQLiteOpenHelper{
         JSONArray allDataArray = new JSONArray();
         String[] columns = { CMyDBHelper.FIELD_EVENT, CMyDBHelper.FIELD_PRICE, CMyDBHelper.FIELD_CATEGORY, CMyDBHelper.FIELD_TIME,  CMyDBHelper.FIELD_WHO };
         ArrayList<ContentValues> arrayContentList = getListOfRecord(CMyDBHelper.TABLE_NAME_RECORD,columns, null, null,null,null,CMyDBHelper.FIELD_ID);
+        Toast.makeText(context, "File:"+ arrayContentList.size(), Toast.LENGTH_LONG).show();
 
         // Debug 代码
         for(int i=0; i<arrayContentList.size(); i++) {
@@ -404,6 +409,7 @@ public class CMyDBHelper extends SQLiteOpenHelper{
                 return false;
             }
         }
+        Toast.makeText(context, "Begin Backup Records to external path:"+Environment.getExternalStorageDirectory() + DATABASE_RECORD_BACKUP_FILE, Toast.LENGTH_LONG).show();
 
         MyLog.e(TAG, "===yangyu=== Begin Backup Records to external path:"+Environment.getExternalStorageDirectory() + DATABASE_RECORD_BACKUP_FILE);
         try {
@@ -448,6 +454,7 @@ public class CMyDBHelper extends SQLiteOpenHelper{
                         jsonObject.getString(CMyDBHelper.FIELD_WHO));
                 long retId = insertRecord(CMyDBHelper.TABLE_NAME_RECORD, data);
                 if(retId > 0){
+                    Toast.makeText(context, "DB Restore records Num:"+allData.length(), Toast.LENGTH_LONG).show();
                     MyLog.d(TAG, "===yangyu=== Add Record ok: "+ jsonObject.getString(CMyDBHelper.FIELD_EVENT));
                 }else{
                     MyLog.e(TAG, "===yangyu=== add failed! :" + jsonObject.getString(CMyDBHelper.FIELD_EVENT));

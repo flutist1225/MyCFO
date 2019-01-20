@@ -1,8 +1,11 @@
 package com.changda123.www.mycfo;
 
+import android.app.Application;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.changda123.www.mycfo.Util.MyLog;
 
@@ -23,7 +26,7 @@ public class ConfManagerActivity extends AppCompatActivity {
         backupButton.setOnClickListener(v -> {
             //if(!CMyDBHelper.getInstance(this).IsBackupDatabaseExist()){
             MyLog.d(TAG, "Begin Backup DB...");
-              CMyDBHelper.getInstance(this).BackupRecordToFile();
+              CMyDBHelper.getInstance(this).BackupRecordToFile(this);
             //}
         });
 
@@ -31,6 +34,9 @@ public class ConfManagerActivity extends AppCompatActivity {
         restoreButton.setOnClickListener(v -> {
             if(CMyDBHelper.getInstance(this).IsBackupDatabaseExist()){
                 CMyDBHelper.getInstance(this).RestoreDBfromFile(this);
+
+            }else{
+                Toast.makeText(getApplicationContext(), "DB file is not existed！", Toast.LENGTH_LONG).show();
             }
         });
 
